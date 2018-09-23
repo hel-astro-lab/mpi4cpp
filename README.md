@@ -13,10 +13,13 @@ My hope is that by dropping compiler support of all the ancient C++ versions one
 ## Current implementation
 
 - [x] mpi environment 
-- [ ] communicators
+- [x] communicators
 - [ ] blocking communication
 - [ ] non-blocking
 - [ ] advanced serialization & optimization
+
+other not so urgent implementations:
+- [ ] sendrecv
 - [ ] collectives
 
 
