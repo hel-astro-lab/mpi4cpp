@@ -1,4 +1,4 @@
-#include <mpi2pp/mpi.hpp>
+#include <mpi2pp/mpi.h>
 #include <iostream>
 
 namespace mpi = mpi2pp::mpi;
@@ -24,6 +24,8 @@ int main(int argc, char* argv[])
   //  int number_two=2;
   //  world.send(0, 1, number_two);
   //}
+
+  std::cout << "success!\n";
 
   return 0;
 }
