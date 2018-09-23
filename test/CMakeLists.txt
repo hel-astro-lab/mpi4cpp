@@ -2,7 +2,9 @@ project (tests)
 
 
 set (TEST_FILES 
-     hello.c++
+     test_init.c++
+     test_send_recv_nodata.c++
+     test_send_recv.c++
      )
 
 
