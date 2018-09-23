@@ -5,8 +5,10 @@
 #include <iterator>
 #include <memory>
 
+#include "detail/mpl.h"
 #include "exception.h"
 #include "status.h"
+#include "datatype.h"
 
 
 
@@ -136,7 +138,7 @@ class communicator
 
 
   //--------------------------------------------------
-  // Blocking communication
+  // Point-to-point communication
 
   /**
    *  @brief Send a message to another process without any data.
@@ -177,6 +179,188 @@ class communicator
   status recv(int source, int tag) const;
 
 
+  /**
+   *  @brief Send data to another process.
+   *
+   *  This routine executes a potentially blocking send with tag @p tag
+   *  to the process with rank @p dest. It can be received by the
+   *  destination process with a matching @c recv call.
+   *
+   *  The given @p value must be suitable for transmission over
+   *  MPI. There are several classes of types that meet these
+   *  requirements:
+   *
+   *    - Types with mappings to MPI data types: If @c
+   *    is_mpi_datatype<T> is convertible to @c mpl::true_, then @p
+   *    value will be transmitted using the MPI data type
+   *    @c get_mpi_datatype<T>(). All primitive C++ data types that have
+   *    MPI equivalents, e.g., @c int, @c float, @c char, @c double,
+   *    etc., have built-in mappings to MPI data types. You may turn a
+   *    Serializable type with fixed structure into an MPI data type by
+   *    specializing @c is_mpi_datatype for your type.
+   *
+   *    - Serializable types: Any type that provides the @c serialize()
+   *    functionality required by the Boost.Serialization library can be
+   *    transmitted and received.
+   *
+   *    - Packed archives and skeletons: Data that has been packed into
+   *    an @c mpi::packed_oarchive or the skeletons of data that have
+   *    been backed into an @c mpi::packed_skeleton_oarchive can be
+   *    transmitted, but will be received as @c mpi::packed_iarchive and
+   *    @c mpi::packed_skeleton_iarchive, respectively, to allow the
+   *    values (or skeletons) to be extracted by the destination process.
+   *
+   *    - Content: Content associated with a previously-transmitted
+   *    skeleton can be transmitted by @c send and received by @c
+   *    recv. The receiving process may only receive content into the
+   *    content of a value that has been constructed with the matching
+   *    skeleton.
+   *
+   *  For types that have mappings to an MPI data type (including the
+   *  concent of a type), an invocation of this routine will result in
+   *  a single MPI_Send call. For variable-length data, e.g.,
+   *  serialized types and packed archives, two messages will be sent
+   *  via MPI_Send: one containing the length of the data and the
+   *  second containing the data itself.
+   * 
+   *  Std::vectors of MPI data type
+   *  are considered variable size, e.g. their number of elements is 
+   *  unknown and must be transmited (although the serialization process
+   *  is skipped). You can use the array specialized versions of 
+   *  communication methods is both sender and receiver know the vector 
+   *  size.
+   *  
+   *  Note that the transmission mode for variable-length data is an 
+   *  implementation detail that is subject to change.
+   *
+   *  @param dest The rank of the remote process to which the data
+   *  will be sent.
+   *
+   *  @param tag The tag that will be associated with this message. Tags
+   *  may be any integer between zero and an implementation-defined
+   *  upper limit. This limit is accessible via @c environment::max_tag().
+   *
+   *  @param value The value that will be transmitted to the
+   *  receiver. The type @c T of this value must meet the aforementioned
+   *  criteria for transmission. 
+   */
+  template<typename T>
+  void send(int dest, int tag, const T& value) const;
+
+  template<typename T, typename A>
+  void send(int dest, int tag, const std::vector<T,A>& value) const;
+
+  /**
+   *  @brief Send an array of values to another process.
+   *
+   *  This routine executes a potentially blocking send of an array of
+   *  data with tag @p tag to the process with rank @p dest. It can be
+   *  received by the destination process with a matching array @c
+   *  recv call.
+   *
+   *  If @c T is an MPI datatype, an invocation of this routine will
+   *  be mapped to a single call to MPI_Send, using the datatype @c
+   *  get_mpi_datatype<T>().
+   *
+   *  @param dest The process rank of the remote process to which
+   *  the data will be sent.
+   *
+   *  @param tag The tag that will be associated with this message. Tags
+   *  may be any integer between zero and an implementation-defined
+   *  upper limit. This limit is accessible via @c environment::max_tag().
+   *
+   *  @param values The array of values that will be transmitted to the
+   *  receiver. The type @c T of these values must be mapped to an MPI
+   *  data type.
+   *
+   *  @param n The number of values stored in the array. The destination
+   *  process must call receive with at least this many elements to
+   *  correctly receive the message.
+   */
+  template<typename T>
+  void send(int dest, int tag, const T* values, int n) const;
+
+  /**
+   * @brief Receive data from a remote process.
+   *
+   * This routine blocks until it receives a message from the process @p
+   * source with the given @p tag. The type @c T of the @p value must be
+   * suitable for transmission over MPI, which includes serializable
+   * types, types that can be mapped to MPI data types (including most
+   * built-in C++ types), packed MPI archives, skeletons, and content
+   * associated with skeletons; see the documentation of @c send for a
+   * complete description.
+   *
+   *   @param source The process that will be sending data. This will
+   *   either be a process rank within the communicator or the
+   *   constant @c any_source, indicating that we can receive the
+   *   message from any process.
+   *
+   *   @param tag The tag that matches a particular kind of message sent
+   *   by the source process. This may be any tag value permitted by @c
+   *   send. Alternatively, the argument may be the constant @c any_tag,
+   *   indicating that this receive matches a message with any tag.
+   *
+   *   @param value Will contain the value of the message after a
+   *   successful receive. The type of this value must match the value
+   *   transmitted by the sender, unless the sender transmitted a packed
+   *   archive or skeleton: in these cases, the sender transmits a @c
+   *   packed_oarchive or @c packed_skeleton_oarchive and the
+   *   destination receives a @c packed_iarchive or @c
+   *   packed_skeleton_iarchive, respectively.
+   *
+   *   @returns Information about the received message.
+   */
+  template<typename T>
+  status recv(int source, int tag, T& value) const;
+
+  template<typename T, typename A>
+  status recv(int source, int tag, std::vector<T,A>& value) const;
+
+
+  /**
+   * @brief Receive an array of values from a remote process.
+   *
+   * This routine blocks until it receives an array of values from the
+   * process @p source with the given @p tag. If the type @c T is 
+   *
+   *   @param source The process that will be sending data. This will
+   *   either be a process rank within the communicator or the
+   *   constant @c any_source, indicating that we can receive the
+   *   message from any process.
+   *
+   *   @param tag The tag that matches a particular kind of message sent
+   *   by the source process. This may be any tag value permitted by @c
+   *   send. Alternatively, the argument may be the constant @c any_tag,
+   *   indicating that this receive matches a message with any tag.
+   *
+   *   @param values Will contain the values in the message after a
+   *   successful receive. The type of these elements must match the
+   *   type of the elements transmitted by the sender.
+   *
+   *   @param n The number of values that can be stored into the @p
+   *   values array. This shall not be smaller than the number of
+   *   elements transmitted by the sender.
+   *
+   *   @throws std::range_error if the message to be received contains
+   *   more than @p n values.
+   *
+   *   @returns Information about the received message.
+   */
+  template<typename T>
+  status recv(int source, int tag, T* values, int n) const;
+
+
+  // We're sending/receivig a vector with associated MPI datatype.
+  // We need to send/recv the size and then the data and make sure 
+  // blocking and non blocking method agrees on the format.
+
+  template<typename T, typename A>
+  void send_vector(int dest, int tag, const std::vector<T,A>& value, 
+		   mpl::true_) const;
+  template<typename T, typename A>
+  status recv_vector(int source, int tag, std::vector<T,A>& value,
+		     mpl::true_) const;
 
 
   protected:
@@ -201,6 +385,43 @@ class communicator
       delete comm;
     }
   };
+
+
+  //--------------------------------------------------
+
+  /**
+   * We're sending a type that has an associated MPI datatype, so we
+   * map directly to that datatype.
+   */
+  template<typename T>
+  void send_impl(int dest, int tag, const T& value, mpl::true_) const;
+
+  /**
+   * We're receiving a type that has an associated MPI datatype, so we
+   * map directly to that datatype.
+   */
+  template<typename T>
+  status recv_impl(int source, int tag, T& value, mpl::true_) const;
+
+  //--------------------------------------------------
+
+  /**
+   * We're sending an array of a type that has an associated MPI
+   * datatype, so we map directly to that datatype.
+   */
+  template<typename T>
+  void 
+  array_send_impl(int dest, int tag, const T* values, int n, mpl::true_) const;
+
+  /**
+   * We're receiving an array of a type that has an associated MPI
+   * datatype, so we map directly to that datatype.
+   */
+  template<typename T>
+  status 
+  array_recv_impl(int source, int tag, T* values, int n, mpl::true_) const;
+
+  //--------------------------------------------------
 
 
  protected:
@@ -229,6 +450,146 @@ inline bool operator!=(const communicator& comm1, const communicator& comm2)
 {
   return !(comm1 == comm2);
 }
+
+
+//--------------------------------------------------
+
+// We're sending a type that has an associated MPI datatype, so we
+// map directly to that datatype.
+template<typename T>
+void
+communicator::send_impl(int dest, int tag, const T& value, mpl::true_) const
+{
+  MPI_CHECK_RESULT(MPI_Send,
+                  (const_cast<T*>(&value), 1, get_mpi_datatype<T>(value),
+                  dest, tag, MPI_Comm(*this)));
+}
+
+// We're receiving a type that has an associated MPI datatype, so we
+// map directly to that datatype.
+template<typename T>
+status communicator::recv_impl(int source, int tag, T& value, mpl::true_) const
+{
+  status stat;
+
+  MPI_CHECK_RESULT(MPI_Recv,
+                  (const_cast<T*>(&value), 1, 
+                  get_mpi_datatype<T>(value),
+                  source, tag, MPI_Comm(*this), &stat.m_status));
+  return stat;
+}
+
+//--------------------------------------------------
+
+// Single-element receive may either send the element directly or
+// serialize it via a buffer.
+template<typename T>
+void communicator::send(int dest, int tag, const T& value) const
+{
+  this->send_impl(dest, tag, value, is_mpi_datatype<T>());
+}
+
+// Single-element receive may either receive the element directly or
+// deserialize it from a buffer.
+template<typename T>
+status communicator::recv(int source, int tag, T& value) const
+{
+  return this->recv_impl(source, tag, value, is_mpi_datatype<T>());
+}
+
+//--------------------------------------------------
+
+// We're sending an array of a type that has an associated MPI
+// datatype, so we map directly to that datatype.
+template<typename T>
+void
+communicator::array_send_impl(int dest, int tag, const T* values, int n,
+                              mpl::true_) const
+{
+  MPI_CHECK_RESULT(MPI_Send,
+                  (const_cast<T*>(values), n, 
+                  get_mpi_datatype<T>(*values),
+                  dest, tag, MPI_Comm(*this)));
+}
+
+template<typename T>
+status 
+communicator::array_recv_impl(int source, int tag, T* values, int n, 
+                              mpl::true_) const
+{
+  status stat;
+  MPI_CHECK_RESULT(MPI_Recv,
+                  (const_cast<T*>(values), n, 
+                  get_mpi_datatype<T>(*values),
+                  source, tag, MPI_Comm(*this), &stat.m_status));
+  return stat;
+}
+
+//--------------------------------------------------
+
+// vector of a type has an associated MPI datatype, so we map directly to 
+// that datatype
+template<typename T, typename A>
+void communicator::send_vector(int dest, int tag, 
+  const std::vector<T,A>& value, mpl::true_ true_type) const
+{
+  // send the vector size
+  typename std::vector<T,A>::size_type size = value.size();
+  send(dest, tag, size);
+  // send the data
+  this->array_send_impl(dest, tag, value.data(), size, true_type);
+}
+
+template<typename T, typename A>
+status communicator::recv_vector(int source, int tag, 
+  std::vector<T,A>& value, mpl::true_ true_type) const
+{
+  // receive the vector size
+  typename std::vector<T,A>::size_type size = 0;
+  recv(source, tag, size);
+  // size the vector
+  value.resize(size);
+  // receive the data
+  return this->array_recv_impl(source, tag, value.data(), size, true_type);
+}
+
+//--------------------------------------------------
+
+template<typename T, typename A>
+void communicator::send(int dest, int tag, const std::vector<T,A>& value) const
+{
+  send_vector(dest, tag, value, is_mpi_datatype<T>());
+}
+
+template<typename T, typename A>
+status communicator::recv(int source, int tag, std::vector<T,A>& value) const
+{
+  return recv_vector(source, tag, value, is_mpi_datatype<T>());
+}
+
+//--------------------------------------------------
+
+// Array send must send the elements directly
+template<typename T>
+void communicator::send(int dest, int tag, const T* values, int n) const
+{
+  this->array_send_impl(dest, tag, values, n, is_mpi_datatype<T>());
+}
+
+// Array receive must receive the elements directly into a buffer.
+template<typename T>
+status communicator::recv(int source, int tag, T* values, int n) const
+{
+  return this->array_recv_impl(source, tag, values, n, is_mpi_datatype<T>());
+}
+
+//--------------------------------------------------
+
+
+
+
+
+
 
 
 } } // ns mpi2pp::mpi

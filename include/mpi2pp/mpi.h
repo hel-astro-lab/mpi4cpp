@@ -6,7 +6,7 @@
 // new implementations
 #include "environment.h"
 #include "communicator.h"
-#include "status.h"
+//#include "status.h"
 
 
 
