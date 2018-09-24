@@ -23,6 +23,7 @@ set (TEST_FILES
      send_recv
      send_recv_types
      arrays
+     isend_irecv_nodata
      )
 
 

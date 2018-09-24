@@ -1,6 +1,28 @@
 namespace mpi2pp { namespace mpi {
 
 //--------------------------------------------------
+// send/recv no data
+
+void communicator::send(int dest, int tag) const
+{
+  MPI_CHECK_RESULT(MPI_Send,
+                         (MPI_BOTTOM, 0, MPI_PACKED,
+                          dest, tag, MPI_Comm(*this)));
+}
+
+status communicator::recv(int source, int tag) const
+{
+  status stat;
+  MPI_CHECK_RESULT(MPI_Recv,
+                         (MPI_BOTTOM, 0, MPI_PACKED,
+                          source, tag, MPI_Comm(*this), &stat.m_status));
+  return stat;
+}
+
+
+
+//--------------------------------------------------
+// flat POD object
 
 // We're sending a type that has an associated MPI datatype, so we
 // map directly to that datatype.
