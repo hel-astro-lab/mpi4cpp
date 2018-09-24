@@ -31,6 +31,9 @@ bool test_sending(mpi::communicator& world)
     assert(msg == 1);
   }
 
+  mpi::wait_all(reqs, reqs+2);
+
+  world.barrier();
   
   return true;
 }

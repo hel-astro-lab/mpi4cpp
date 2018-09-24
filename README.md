@@ -24,13 +24,13 @@ My hope is that by dropping compiler support of all the ancient C++ versions one
     - [x] native types
     - [x] c-style arrays
     - [x] std::array
-    - [x] std::vector
+    - [ ] std::vector
     - [x] std::vector for known size
-- [ ] blockers/synchronization
-    - [ ] barrier
-    - [ ] waitany
-    - [ ] waitsome
-    - [ ] waitall
+- [x] blockers/synchronization
+    - [x] barrier
+    - [x] wait_any
+    - [x] wait_some
+    - [x] wait_all
 - [ ] advanced serialization & optimization
 
 other not so urgent implementations:

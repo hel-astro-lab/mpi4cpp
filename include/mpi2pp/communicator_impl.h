@@ -39,7 +39,7 @@ void communicator::abort(int errcode) const
 
 void (communicator::barrier)() const
 {
-  BOOST_MPI_CHECK_RESULT(MPI_Barrier, (MPI_Comm(*this)));
+  MPI_CHECK_RESULT(MPI_Barrier, (MPI_Comm(*this)));
 }
 
 

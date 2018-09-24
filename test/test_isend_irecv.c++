@@ -22,8 +22,7 @@ int main(int argc, char* argv[])
     reqs[1] = world.irecv(0, 0, msg);
   }
 
-  reqs[0].wait();
-  reqs[1].wait();
+  mpi::wait_all(reqs, reqs+2);
 
   if (world.rank() == 0) {
     assert(msg == 2);

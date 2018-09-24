@@ -7,7 +7,10 @@
 
 namespace mpi = mpi2pp::mpi;
 
-#define NX 100
+using requests = std::vector<mpi::request>;
+
+
+#define NX 1000
 
 // C-style arrays
 template<typename T>
@@ -26,8 +29,7 @@ bool test_carray(mpi::communicator& world)
     reqs[1] = world.irecv(0, 0, &msg[0], NX);
   }
 
-  reqs[0].wait();
-  reqs[1].wait();
+  mpi::wait_all(reqs, reqs+2);
   
   if (world.rank() == 0) {
     for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(2) );
@@ -44,7 +46,7 @@ bool test_carray(mpi::communicator& world)
 template<typename T>
 bool test_array(mpi::communicator& world)
 {
-  mpi::request reqs[2];
+  requests reqs(2);
   std::array<T, NX> msg;
 
   if (world.rank() == 0) {
@@ -57,8 +59,7 @@ bool test_array(mpi::communicator& world)
     reqs[1] = world.irecv(0, 0, &msg[0], NX);
   }
 
-  reqs[0].wait();
-  reqs[1].wait();
+  mpi::wait_all(reqs.begin(), reqs.end());
   
   if (world.rank() == 0) {
     for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(2) );
@@ -77,7 +78,7 @@ bool test_vector(mpi::communicator& world)
   std::vector<T> msg;
   msg.resize(NX);
 
-  mpi::request reqs[2];
+  requests reqs(2);
 
   if (world.rank() == 0) {
     for(int i=0; i<NX; i++) msg[i] = static_cast<T>(1);
@@ -89,13 +90,14 @@ bool test_vector(mpi::communicator& world)
     reqs[1] = world.irecv(0, 0, msg);
   }
 
-  reqs[0].wait();
-  reqs[1].wait();
+  mpi::wait_all(reqs.begin(), reqs.end());
   
   if (world.rank() == 0) {
     for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(2) );
+    std::cout << "rank " << world.rank() << " got message " << msg[0] << std::endl;
   } else {
     for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(1) );
+    std::cout << "rank " << world.rank() << " got message " << msg[0] << std::endl;
   }
 
   return true;
@@ -105,8 +107,8 @@ bool test_vector(mpi::communicator& world)
 template<typename T>
 bool test_vector_arr(mpi::communicator& world)
 {
+  requests reqs(2);
 
-  mpi::request reqs[2];
   std::vector<T> msg;
   msg.resize(NX);
 
@@ -120,8 +122,7 @@ bool test_vector_arr(mpi::communicator& world)
     reqs[1] = world.irecv(0, 0, &msg[0], NX);
   }
 
-  reqs[0].wait();
-  reqs[1].wait();
+  mpi::wait_all(reqs.begin(), reqs.end());
   
   if (world.rank() == 0) {
     for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(2) );

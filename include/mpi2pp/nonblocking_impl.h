@@ -135,8 +135,7 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
     status stat;
     if (self->m_requests[1] == MPI_REQUEST_NULL) {
       // Wait for the count message to complete
-      MPI_CHECK_RESULT(MPI_Wait,
-                             (self->m_requests, &stat.m_status));
+      MPI_CHECK_RESULT(MPI_Wait, (self->m_requests, &stat.m_status));
       // Resize our buffer and get ready to receive its data
       data->values.resize(data->count);
       MPI_CHECK_RESULT(MPI_Irecv,
@@ -153,8 +152,7 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
 
     if (self->m_requests[1] == MPI_REQUEST_NULL) {
       // Check if the count message has completed
-      MPI_CHECK_RESULT(MPI_Test,
-                             (self->m_requests, &flag, &stat.m_status));
+      MPI_CHECK_RESULT(MPI_Test, (self->m_requests, &flag, &stat.m_status));
       if (flag) {
         // Resize our buffer and get ready to receive its data
         data->values.resize(data->count);
@@ -167,8 +165,7 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
     } 
 
     // Check if we have received the message data
-    MPI_CHECK_RESULT(MPI_Test,
-                           (self->m_requests + 1, &flag, &stat.m_status));
+    MPI_CHECK_RESULT(MPI_Test, (self->m_requests + 1, &flag, &stat.m_status));
     if (flag) {
       return stat;
     } else 

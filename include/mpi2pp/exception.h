@@ -47,5 +47,16 @@ class MPI_Testall_Error : MPIerror
 };
 
 
+class MPI_Waitany_Error : MPIerror
+{
+  public:
+  MPI_Waitany_Error()
+  {
+    std::cerr << "MPI_Waitany: XXX" << "\n";
+  }
+};
+
+
+
 
 } } // ns mpi2pp::mpi
