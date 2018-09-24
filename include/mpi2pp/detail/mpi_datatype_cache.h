@@ -43,6 +43,19 @@ public:
     return get_mpi_datatype<T>(x);
   }
 
+  /*
+  template <class T, std::size_t N>
+  MPI_Datatype datatype(const T& x = T(), 
+      typename std::enable_if<
+        is_mpi_builtin_datatype<
+          typename std::remove_all_extents<T>::type
+        >::type >::type* =0)
+  {
+    return get_mpi_datatype<T>(x);
+  }
+  */
+
+
   template <class T>
   MPI_Datatype datatype(const T& x =T(), typename std::enable_if<!is_mpi_builtin_datatype<T>::type >::type* =0 )
   = delete; // TODO: implement

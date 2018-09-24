@@ -1,6 +1,8 @@
 #pragma once
 
 #include <tuple>
+#include <array>
+#include <vector>
 
 #include "mpi2pp/datatype_fwd.h"
 #include "mpi2pp/detail/mpl.h"
@@ -159,8 +161,8 @@ MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(int, int>), MPI_2INT, builtin);
 template <class T, class U>
 struct is_mpi_datatype<std::pair<T,U> >
  : public mpl::and_<is_mpi_datatype<T>,is_mpi_datatype<U> >
-{
-};
+{ };
+
 
 /// specialization of is_mpi_datatype for arrays
 template<class T, std::size_t N>
@@ -168,7 +170,6 @@ struct is_mpi_datatype<std::array<T, N> >
  : public is_mpi_datatype<T>
 {
 };
-
 
 // types that are sometimes not supported and may cause problems
 

@@ -15,7 +15,10 @@ My hope is that by dropping compiler support of all the ancient C++ versions one
 - [x] mpi environment 
 - [x] communicators
 - [x] point-to-point communication
-    - [ ] arrays/vectors
+    - [x] c-style arrays
+    - [x] std::array
+    - [x] std::vector
+    - [x] std::vector for known size
 - [ ] non-blocking
 - [ ] advanced serialization & optimization
 

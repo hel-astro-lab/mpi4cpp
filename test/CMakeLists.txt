@@ -21,12 +21,13 @@ set (TEST_FILES
      init
      send_recv_nodata
      send_recv
+     send_recv_types
+     arrays
      )
 
 
 # add all tests
 foreach(i ${TEST_FILES})
-    message(${i})
     add_mpi_test(${i} 2)
 endforeach()
 
