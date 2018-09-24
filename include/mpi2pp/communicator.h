@@ -497,8 +497,8 @@ class communicator
    *
    *  @returns a @c request object that describes this communication.
    */
-  //template<typename T>
-  //request isend(int dest, int tag, const T& value) const;
+  template<typename T>
+  request isend(int dest, int tag, const T& value) const;
 
   /**
    *  @brief Prepare to receive a message from a remote process.
@@ -530,8 +530,8 @@ class communicator
    *
    *   @returns a @c request object that describes this communication.
    */
-  //template<typename T>
-  //request irecv(int source, int tag, T& value) const;
+  template<typename T>
+  request irecv(int source, int tag, T& value) const;
 
 
 
@@ -562,11 +562,11 @@ class communicator
    *
    *  @returns a @c request object that describes this communication.
    */
-  //template<typename T>
-  //request isend(int dest, int tag, const T* values, int n) const;
+  template<typename T>
+  request isend(int dest, int tag, const T* values, int n) const;
 
-  //template<typename T, class A>
-  //request isend(int dest, int tag, const std::vector<T,A>& values) const;
+  template<typename T, class A>
+  request isend(int dest, int tag, const std::vector<T,A>& values) const;
 
 
   /**
@@ -595,13 +595,61 @@ class communicator
    *
    *    @returns a @c request object that describes this communication.
    */
-  //template<typename T>
-  //request irecv(int source, int tag, T* values, int n) const;
+  template<typename T>
+  request irecv(int source, int tag, T* values, int n) const;
 
-  //template<typename T, typename A>
-  //request irecv(int source, int tag, std::vector<T,A>& values) const;
+  template<typename T, typename A>
+  request irecv(int source, int tag, std::vector<T,A>& values) const;
   
+  private:
+
+  /**
+   * We're sending a type that has an associated MPI datatype, so we
+   * map directly to that datatype.
+   */
+  template<typename T>
+  request isend_impl(int dest, int tag, const T& value, mpl::true_) const;
+
+  /*
+   * We're receiving a type that has an associated MPI datatype, so we
+   * map directly to that datatype.
+   */
+  template<typename T>
+  request irecv_impl(int source, int tag, T& value, mpl::true_) const;
+
+
+  /**
+   * We're sending an array of a type that has an associated MPI
+   * datatype, so we map directly to that datatype.
+   */
+  template<typename T>
+  request 
+  array_isend_impl(int dest, int tag, const T* values, int n, 
+                   mpl::true_) const;
+
+  /**
+   * We're receiving a type that has an associated MPI datatype, so we
+   * map directly to that datatype.
+   */
+  template<typename T>
+  request 
+  array_irecv_impl(int source, int tag, T* values, int n, mpl::true_) const;
+
+
+  // We're sending/receivig a vector with associated MPI datatype.
+  // We need to send/recv the size and then the data and make sure 
+  // blocking and non blocking method agrees on the format.
+  template<typename T, typename A>
+  request irecv_vector(int source, int tag, std::vector<T,A>& values, 
+                       mpl::true_) const;
+
+  template<typename T, class A>
+  request isend_vector(int dest, int tag, const std::vector<T,A>& values,
+                       mpl::true_) const;
+
+
   
+  public:
   /**
    * @brief Waits until a message is available to be received.
    *

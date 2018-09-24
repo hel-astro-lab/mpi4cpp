@@ -26,17 +26,20 @@ class request
   /**
    *  Constructs request for complex data.
    */
-  template<typename T> request(communicator const& comm, int source, int tag, T& value);
+  template<typename T> 
+  request(communicator const& comm, int source, int tag, T& value);
 
   /**
    *  Constructs request for array of complex data.
    */  
-  template<typename T> request(communicator const& comm, int source, int tag, T* value, int n);
+  template<typename T> 
+  request(communicator const& comm, int source, int tag, T* value, int n);
 
   /**
    *  Constructs request for array of primitive data.
    */
-  template<typename T, class A> request(communicator const& comm, int source, int tag, std::vector<T,A>& values, mpl::true_ primitive);
+  template<typename T, class A> 
+  request(communicator const& comm, int source, int tag, std::vector<T,A>& values, mpl::true_ primitive);
 
   /**
    *  Wait until the communication associated with this request has

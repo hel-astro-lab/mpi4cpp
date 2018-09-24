@@ -24,6 +24,9 @@ set (TEST_FILES
      send_recv_types
      arrays
      isend_irecv_nodata
+     isend_irecv
+     isend_irecv_types
+     iarrays
      )
 
 

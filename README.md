@@ -14,12 +14,23 @@ My hope is that by dropping compiler support of all the ancient C++ versions one
 
 - [x] mpi environment 
 - [x] communicators
-- [x] point-to-point communication
+- [x] point-to-point communication  (`send`/`recv`)
+    - [x] native types
     - [x] c-style arrays
     - [x] std::array
     - [x] std::vector
     - [x] std::vector for known size
-- [ ] non-blocking
+- [ ] non-blocking (`isend`/`irecv`)
+    - [x] native types
+    - [x] c-style arrays
+    - [x] std::array
+    - [x] std::vector
+    - [x] std::vector for known size
+- [ ] blockers/synchronization
+    - [ ] barrier
+    - [ ] waitany
+    - [ ] waitsome
+    - [ ] waitall
 - [ ] advanced serialization & optimization
 
 other not so urgent implementations:
