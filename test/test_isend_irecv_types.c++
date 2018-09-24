@@ -30,6 +30,7 @@ bool test_sending(mpi::communicator& world)
   } else {
     assert(msg == 1);
   }
+
   
   return true;
 }

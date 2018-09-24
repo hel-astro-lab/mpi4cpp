@@ -701,7 +701,7 @@ class communicator
   // to avoid expanding the macro when we define our barrier()
   // function. However, some C++ parsers (Doxygen, for instance) can't
   // handle this syntax, so we only use it when necessary.
-  //void (barrier)() const;
+  void (barrier)() const;
 #else
   /**
    * @brief Wait for all processes within a communicator to reach the
@@ -711,7 +711,7 @@ class communicator
    * until all processes have entered it, then releases all of the
    * processes "simultaneously". It is equivalent to @c MPI_Barrier.
    */
-  //void barrier() const;
+  void barrier() const;
 #endif
 
 
