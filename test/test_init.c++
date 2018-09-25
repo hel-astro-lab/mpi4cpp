@@ -1,7 +1,7 @@
-#include <mpi2pp/mpi.h>
+#include <mpi4cpp/mpi.h>
 #include <iostream>
 
-namespace mpi = mpi2pp::mpi;
+namespace mpi = mpi4cpp::mpi;
 
 int main(int argc, char* argv[])
 {

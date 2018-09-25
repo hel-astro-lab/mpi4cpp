@@ -1,9 +1,9 @@
-#include <mpi2pp/mpi.h>
+#include <mpi4cpp/mpi.h>
 #include <iostream>
 
 #include <cassert>
 
-namespace mpi = mpi2pp::mpi;
+namespace mpi = mpi4cpp::mpi;
 
 template<typename T>
 bool test_sending(mpi::communicator& world)
