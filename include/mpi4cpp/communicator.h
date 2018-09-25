@@ -14,7 +14,7 @@
 
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 /**
  * @brief A constant representing "any process."
@@ -746,7 +746,7 @@ inline bool operator!=(const communicator& comm1, const communicator& comm2)
 }
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi
 
 // communication specific implementations
 #include "communicator_impl.h"

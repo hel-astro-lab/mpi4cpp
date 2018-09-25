@@ -6,7 +6,7 @@
 #include "exception.h"
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 
 request::request()
@@ -145,4 +145,4 @@ void request::cancel()
 
 
 
-} } // end namespace mpi2pp::mpi
+} } // end namespace mpi4cpp::mpi

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
   namespace mpl {
 
 //--------------------------------------------------
@@ -268,5 +268,5 @@ struct if_ :
 
 
   } // ns mpl
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi
 

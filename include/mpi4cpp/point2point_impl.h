@@ -1,4 +1,4 @@
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 //--------------------------------------------------
 // send/recv no data
@@ -156,4 +156,4 @@ status communicator::recv(int source, int tag, T* values, int n) const
 //--------------------------------------------------
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

@@ -3,11 +3,11 @@
 #include <type_traits>
 #include <typeinfo>
 
-#include "mpi2pp/datatype_fwd.h"
-#include "mpi2pp/exception.h"
+#include "mpi4cpp/datatype_fwd.h"
+#include "mpi4cpp/exception.h"
 
 
-namespace mpi2pp { namespace mpi { namespace detail {
+namespace mpi4cpp { namespace mpi { namespace detail {
 
 
 /// @brief comparison function object for two std::type_info pointers
@@ -89,4 +89,4 @@ mpi_datatype_map& mpi_datatype_cache();
 
 
 
-} } } // ns mpi2pp::mpi::detail
+} } } // ns mpi4cpp::mpi::detail

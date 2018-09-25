@@ -1,7 +1,7 @@
 #include "status.h"
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 bool status::cancelled() const
 {
@@ -12,4 +12,4 @@ bool status::cancelled() const
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

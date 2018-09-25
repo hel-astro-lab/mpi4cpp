@@ -6,7 +6,7 @@
 #include <ostream>
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 
 environment::environment(bool abort_on_exception)
@@ -168,4 +168,4 @@ std::pair<int, int> environment::version()
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

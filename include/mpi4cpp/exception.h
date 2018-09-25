@@ -15,7 +15,7 @@
 
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 // Base error class
 class MPIerror : public std::exception
@@ -59,4 +59,4 @@ class MPI_Waitany_Error : MPIerror
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

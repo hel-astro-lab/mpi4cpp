@@ -6,7 +6,7 @@
 
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
   namespace threading {
 /** @brief specify the supported threading level.
  * 
@@ -205,7 +205,7 @@ private:
 };
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi
 
 
 #include "environment_impl.h"

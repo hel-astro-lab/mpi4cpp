@@ -1,7 +1,7 @@
 #include "communicator.h"
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 
 communicator::communicator()
@@ -43,4 +43,4 @@ void (communicator::barrier)() const
 }
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 template<typename T> struct is_mpi_builtin_datatype;
 template<typename T> struct is_mpi_integer_datatype;
@@ -16,4 +16,4 @@ template<typename T> MPI_Datatype get_mpi_datatype()
 /// a dummy data type giving MPI_PACKED as its MPI_Datatype
 struct packed {};
 
-} } // end namespace mpi2pp::mpi
+} } // end namespace mpi4cpp::mpi

@@ -18,7 +18,7 @@
 #include "exception.h"
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
   using std::optional;
 
@@ -723,4 +723,4 @@ test_some(BidirectionalIterator first, BidirectionalIterator last)
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

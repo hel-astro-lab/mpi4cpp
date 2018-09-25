@@ -1,6 +1,6 @@
 #include "request.h"
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 //--------------------------------------------------
 
@@ -253,4 +253,4 @@ request communicator::irecv(int source, int tag, T* values, int n) const
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

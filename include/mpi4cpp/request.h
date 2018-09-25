@@ -3,7 +3,7 @@
 #include <optional>
 #include <functional>
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 class status;
 class communicator;
@@ -129,6 +129,6 @@ class request
   handler_type          m_handler;
 };
 
-} } // end namespace mpi2pp::mpi
+} } // end namespace mpi4cpp::mpi
 
 #include "request_impl.h"

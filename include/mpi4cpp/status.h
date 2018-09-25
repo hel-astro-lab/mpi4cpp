@@ -3,7 +3,7 @@
 #include <optional>
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 
 class status 
@@ -78,4 +78,4 @@ class status
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

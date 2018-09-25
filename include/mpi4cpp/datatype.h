@@ -4,12 +4,12 @@
 #include <array>
 #include <vector>
 
-#include "mpi2pp/datatype_fwd.h"
-#include "mpi2pp/detail/mpl.h"
-#include "mpi2pp/detail/mpi_datatype_cache.h"
+#include "mpi4cpp/datatype_fwd.h"
+#include "mpi4cpp/detail/mpl.h"
+#include "mpi4cpp/detail/mpi_datatype_cache.h"
 
 
-namespace mpi2pp { namespace mpi {
+namespace mpi4cpp { namespace mpi {
 
 /**
  *  @brief Type traits that determines if there exists a built-in
@@ -112,49 +112,49 @@ template<typename T> MPI_Datatype get_mpi_datatype(const T& x)
 
 //--------------------------------------------------
 //
-#define MPI2PP_JOIN( X, Y ) MPI2PP_DO_JOIN( X, Y )
-#define MPI2PP_DO_JOIN( X, Y ) MPI2PP_DO_JOIN2(X,Y)
-#define MPI2PP_DO_JOIN2( X, Y ) X##Y
+#define MPI4CPP_JOIN( X, Y ) MPI4CPP_DO_JOIN( X, Y )
+#define MPI4CPP_DO_JOIN( X, Y ) MPI4CPP_DO_JOIN2(X,Y)
+#define MPI4CPP_DO_JOIN2( X, Y ) X##Y
 
 /// INTERNAL ONLY
-#define MPI2PP_DATATYPE(CppType, MPIType, Kind)                         \
+#define MPI4CPP_DATATYPE(CppType, MPIType, Kind)                         \
 template<>                                                              \
 inline MPI_Datatype                                                     \
 get_mpi_datatype< CppType >(const CppType&) { return MPIType; }         \
                                                                         \
 template<>                                                              \
- struct MPI2PP_JOIN(is_mpi_,MPI2PP_JOIN(Kind,_datatype))< CppType >     \
+ struct MPI4CPP_JOIN(is_mpi_,MPI4CPP_JOIN(Kind,_datatype))< CppType >     \
 : mpl::true_                                                            \
 {}
 
 /// INTERNAL ONLY
-MPI2PP_DATATYPE(packed, MPI_PACKED, builtin);
-MPI2PP_DATATYPE(char, MPI_CHAR, builtin);
-MPI2PP_DATATYPE(short, MPI_SHORT, integer);
-MPI2PP_DATATYPE(int, MPI_INT, integer);
-MPI2PP_DATATYPE(long, MPI_LONG, integer);
-MPI2PP_DATATYPE(float, MPI_FLOAT, floating_point);
-MPI2PP_DATATYPE(double, MPI_DOUBLE, floating_point);
-MPI2PP_DATATYPE(long double, MPI_LONG_DOUBLE, floating_point);
-MPI2PP_DATATYPE(unsigned char, MPI_UNSIGNED_CHAR, builtin);
-MPI2PP_DATATYPE(unsigned short, MPI_UNSIGNED_SHORT, integer);
-MPI2PP_DATATYPE(unsigned, MPI_UNSIGNED, integer);
-MPI2PP_DATATYPE(unsigned long, MPI_UNSIGNED_LONG, integer);
+MPI4CPP_DATATYPE(packed, MPI_PACKED, builtin);
+MPI4CPP_DATATYPE(char, MPI_CHAR, builtin);
+MPI4CPP_DATATYPE(short, MPI_SHORT, integer);
+MPI4CPP_DATATYPE(int, MPI_INT, integer);
+MPI4CPP_DATATYPE(long, MPI_LONG, integer);
+MPI4CPP_DATATYPE(float, MPI_FLOAT, floating_point);
+MPI4CPP_DATATYPE(double, MPI_DOUBLE, floating_point);
+MPI4CPP_DATATYPE(long double, MPI_LONG_DOUBLE, floating_point);
+MPI4CPP_DATATYPE(unsigned char, MPI_UNSIGNED_CHAR, builtin);
+MPI4CPP_DATATYPE(unsigned short, MPI_UNSIGNED_SHORT, integer);
+MPI4CPP_DATATYPE(unsigned, MPI_UNSIGNED, integer);
+MPI4CPP_DATATYPE(unsigned long, MPI_UNSIGNED_LONG, integer);
 
 
-#define MPI2PP_MPI_LIST2(A, B) A, B
-MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(float, int)>, MPI_FLOAT_INT, 
+#define MPI4CPP_MPI_LIST2(A, B) A, B
+MPI4CPP_DATATYPE(std::pair<MPI4CPP_MPI_LIST2(float, int)>, MPI_FLOAT_INT, 
                    builtin);
-MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(double, int)>, MPI_DOUBLE_INT, 
+MPI4CPP_DATATYPE(std::pair<MPI4CPP_MPI_LIST2(double, int)>, MPI_DOUBLE_INT, 
                    builtin);
-MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(long double, int)>,
+MPI4CPP_DATATYPE(std::pair<MPI4CPP_MPI_LIST2(long double, int)>,
                    MPI_LONG_DOUBLE_INT, builtin);
-MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(long, int>), MPI_LONG_INT, 
+MPI4CPP_DATATYPE(std::pair<MPI4CPP_MPI_LIST2(long, int>), MPI_LONG_INT, 
                    builtin);
-MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(short, int>), MPI_SHORT_INT, 
+MPI4CPP_DATATYPE(std::pair<MPI4CPP_MPI_LIST2(short, int>), MPI_SHORT_INT, 
                    builtin);
-MPI2PP_DATATYPE(std::pair<MPI2PP_MPI_LIST2(int, int>), MPI_2INT, builtin);
-#undef MPI2PP_MPI_LIST2
+MPI4CPP_DATATYPE(std::pair<MPI4CPP_MPI_LIST2(int, int>), MPI_2INT, builtin);
+#undef MPI4CPP_MPI_LIST2
 
 
 /// specialization of is_mpi_datatype for pairs
@@ -175,14 +175,14 @@ struct is_mpi_datatype<std::array<T, N> >
 
 // Define wchar_t specialization of is_mpi_datatype, if possible.
 #if (defined(MPI_WCHAR) || (defined(MPI_VERSION) && MPI_VERSION >= 2))
-MPI2PP_DATATYPE(wchar_t, MPI_WCHAR, builtin);
+MPI4CPP_DATATYPE(wchar_t, MPI_WCHAR, builtin);
 #endif
 
 // Define long long or __int64 specialization of is_mpi_datatype, if possible.
 #if (defined(MPI_LONG_LONG_INT) || (defined(MPI_VERSION) && MPI_VERSION >= 2))
-MPI2PP_DATATYPE(long long, MPI_LONG_LONG_INT, builtin);
+MPI4CPP_DATATYPE(long long, MPI_LONG_LONG_INT, builtin);
 #elif (defined(MPI_LONG_LONG_INT) || (defined(MPI_VERSION) && MPI_VERSION >= 2))
-MPI2PP_DATATYPE(__int64, MPI_LONG_LONG_INT, builtin); 
+MPI4CPP_DATATYPE(__int64, MPI_LONG_LONG_INT, builtin); 
 #endif
 
 // Define unsigned long long or unsigned __int64 specialization of
@@ -192,15 +192,15 @@ MPI2PP_DATATYPE(__int64, MPI_LONG_LONG_INT, builtin);
 // MPI_UNSIGNED_LONG_LONG.
 #if (defined(MPI_UNSIGNED_LONG_LONG) \
    || (defined(MPI_VERSION) && MPI_VERSION >= 2))
-MPI2PP_DATATYPE(unsigned long long, MPI_UNSIGNED_LONG_LONG, builtin);
+MPI4CPP_DATATYPE(unsigned long long, MPI_UNSIGNED_LONG_LONG, builtin);
 #elif (defined(MPI_UNSIGNED_LONG_LONG) \
    || (defined(MPI_VERSION) && MPI_VERSION >= 2))
-MPI2PP_DATATYPE(unsigned __int64, MPI_UNSIGNED_LONG_LONG, builtin); 
+MPI4CPP_DATATYPE(unsigned __int64, MPI_UNSIGNED_LONG_LONG, builtin); 
 #endif
 
 // Define signed char specialization of is_mpi_datatype, if possible.
 #if defined(MPI_SIGNED_CHAR) || (defined(MPI_VERSION) && MPI_VERSION >= 2)
-MPI2PP_DATATYPE(signed char, MPI_SIGNED_CHAR, builtin);
+MPI4CPP_DATATYPE(signed char, MPI_SIGNED_CHAR, builtin);
 #endif
 
 
@@ -232,4 +232,4 @@ struct is_mpi_datatype<bool>
 
 
 
-} } // ns mpi2pp::mpi
+} } // ns mpi4cpp::mpi

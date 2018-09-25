@@ -4,7 +4,7 @@ set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
-project (mpi2pp)
+project (mpi4cpp)
 
 # set location of libraries
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -43,7 +43,6 @@ set (WARNING_FLAGS
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
 
-#add_subdirectory(mpi2pp)
 
 enable_testing()
 add_subdirectory(test)
