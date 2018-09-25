@@ -1,13 +1,11 @@
-# MPI2++
+# MPI4Cpp
 
-Crazy (weekend) project to make a header-only version of the boost::mpi for modern C++-17 and newest MPI versions.
+Crazy (weekend) project to make a modern header-only C++ library of MPI. We rely on template metaprogramming to simplify and automate many communication routines.  Currently just a rip off of boost::mpi where boost dependencies are removed.
 
 
-## Refs / Notes
+All kudos go to [boost::mpi](https://github.com/boostorg/mpi/)! See also their license.
 
-All kudos go to [boost::mpi](https://github.com/boostorg/mpi/)!
-
-My hope is that by dropping compiler support of all the ancient C++ versions one can greatly simplify the boost::mpi and MPI interfaces.
+My hope is that by dropping compiler support of all the ancient C++ versions one can greatly simplify the MPI interface of boost::mpi.
 
 
 ## Current implementation
