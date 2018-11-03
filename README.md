@@ -78,6 +78,11 @@ MPI_Finalize();
     - [x] wait_any
     - [x] wait_some
     - [x] wait_all
+- [ ] user-defined structs
+    - [x] single class
+    - [x] nonblocking
+    - [x] std::vector
+    - [ ] nonblocking std::vector
 - [ ] advanced serialization & optimization
 
 other not so urgent implementations:

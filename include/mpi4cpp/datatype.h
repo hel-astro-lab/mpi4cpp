@@ -117,13 +117,13 @@ template<typename T> MPI_Datatype get_mpi_datatype(const T& x)
 #define MPI4CPP_DO_JOIN2( X, Y ) X##Y
 
 /// INTERNAL ONLY
-#define MPI4CPP_DATATYPE(CppType, MPIType, Kind)                         \
+#define MPI4CPP_DATATYPE(CppType, MPIType, Kind)                        \
 template<>                                                              \
 inline MPI_Datatype                                                     \
 get_mpi_datatype< CppType >(const CppType&) { return MPIType; }         \
                                                                         \
 template<>                                                              \
- struct MPI4CPP_JOIN(is_mpi_,MPI4CPP_JOIN(Kind,_datatype))< CppType >     \
+ struct MPI4CPP_JOIN(is_mpi_,MPI4CPP_JOIN(Kind,_datatype))< CppType >   \
 : mpl::true_                                                            \
 {}
 

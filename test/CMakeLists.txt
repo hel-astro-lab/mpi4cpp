@@ -27,6 +27,7 @@ set (TEST_FILES
      isend_irecv
      isend_irecv_types
      iarrays
+     own_datatype
      )
 
 
