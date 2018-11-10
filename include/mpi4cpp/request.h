@@ -1,9 +1,13 @@
 #pragma once
 
-#include <optional>
+//#include <optional>
+#include "nonstd/optional.hpp"
 #include <functional>
 
 namespace mpi4cpp { namespace mpi {
+
+using nonstd::optional;
+using nonstd::nullopt;
 
 class status;
 class communicator;
@@ -56,7 +60,7 @@ class request
    *  yet. Note that once @c test() returns a @c status object, the
    *  request has completed and @c wait() should not be called.
    */
-  std::optional<status> test();
+  optional<status> test();
 
   /**
    *  Cancel a pending communication, assuming it has not already been
@@ -99,28 +103,28 @@ class request
 
  private:
   enum request_action { ra_wait, ra_test, ra_cancel };
-  typedef std::optional<status> (*handler_type)(request* self, 
+  typedef optional<status> (*handler_type)(request* self, 
                                            request_action action);
 
   /**
    * Handles the non-blocking receive of a serialized value.
    */
   template<typename T>
-  static std::optional<status> 
+  static optional<status> 
   handle_serialized_irecv(request* self, request_action action);
 
   /**
    * Handles the non-blocking receive of an array of  serialized values.
    */
   template<typename T>
-  static std::optional<status> 
+  static optional<status> 
   handle_serialized_array_irecv(request* self, request_action action);
 
    /**
    * Handles the non-blocking receive of a dynamic array of primitive values.
    */
   template<typename T, class A>
-  static std::optional<status> 
+  static optional<status> 
   handle_dynamic_primitive_array_irecv(request* self, request_action action);
 
  private:

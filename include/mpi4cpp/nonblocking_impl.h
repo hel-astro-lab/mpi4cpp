@@ -2,6 +2,9 @@
 
 namespace mpi4cpp { namespace mpi {
 
+using nonstd::optional;
+using nonstd::nullopt;
+
 //--------------------------------------------------
 
 request communicator::isend(int dest, int tag) const
@@ -125,7 +128,7 @@ namespace detail {
 }
 
 template<typename T, class A>
-std::optional<status> 
+optional<status> 
 request::handle_dynamic_primitive_array_irecv(request* self, request_action action)
 {
   typedef detail::dynamic_array_irecv_data<T,A> data_t;
@@ -161,7 +164,7 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
                                 stat.source(), stat.tag(), 
                                 MPI_Comm(data->comm), self->m_requests + 1));
       } else
-        return std::optional<status>(); // We have not finished yet
+        return optional<status>(); // We have not finished yet
     } 
 
     // Check if we have received the message data
@@ -169,9 +172,9 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
     if (flag) {
       return stat;
     } else 
-      return std::optional<status>();
+      return optional<status>();
   } else {
-    return std::optional<status>();
+    return optional<status>();
   }
 }
 

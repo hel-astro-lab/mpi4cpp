@@ -10,8 +10,9 @@
 #include <iterator>  // for std::iterator_traits
 #include <utility>   // for std::pair
 #include <algorithm> // for iter_swap, reverse
-
 #include <cassert>
+//#include <optional>
+#include "nonstd/optional.hpp"
 
 #include "request.h"
 #include "status.h"
@@ -20,7 +21,8 @@
 
 namespace mpi4cpp { namespace mpi {
 
-  using std::optional;
+  using nonstd::optional;
+  using nonstd::nullopt;
 
 
 /** 
