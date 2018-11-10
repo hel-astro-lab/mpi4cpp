@@ -63,7 +63,7 @@ MPI_Datatype get_mpi_datatype<Blob>(const Blob& blob)
 
   // introduce datatypes
   std::array<MPI_Datatype, 3> datatypes{
-    { MPI_LONG, MPI_FLOAT, MPI_DOUBLE }
+    { MPI_INT, MPI_FLOAT, MPI_DOUBLE }
   };
 
   //--------------------------------------------------
