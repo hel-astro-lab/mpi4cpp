@@ -1,12 +1,14 @@
 #pragma once
 
-#include <optional>
 #include <exception>
 
 #include "exception.h"
 
 
 namespace mpi4cpp { namespace mpi {
+
+using nonstd::optional;
+using nonstd::nullopt;
 
 
 request::request()
@@ -74,7 +76,7 @@ status request::wait()
   }
 }
 
-std::optional<status> request::test()
+optional<status> request::test()
 {
   if (m_handler) {
     // This request is a receive for a serialized type. Use the
@@ -88,7 +90,7 @@ std::optional<status> request::test()
     status result;
     int flag = 0;
     MPI_CHECK_RESULT(MPI_Test, (&m_requests[0], &flag, &result.m_status));
-    return flag != 0? std::optional<status>(result) : std::optional<status>();
+    return flag != 0? optional<status>(result) : optional<status>();
   } else {
     // This request is a send of a serialized type, broken into two
     // separate messages. We only get a result if both complete.
@@ -119,7 +121,7 @@ std::optional<status> request::test()
       result.m_status = stats[1];
       return result;
     } else {
-      return std::optional<status>();
+      return optional<status>();
     }
   }
 }

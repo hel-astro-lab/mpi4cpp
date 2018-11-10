@@ -1,12 +1,17 @@
 #pragma once
 
 #include <string>
-#include <optional>
-
+//#include <optional>
+#include <nonstd/optional.hpp>
 
 
 
 namespace mpi4cpp { namespace mpi {
+
+using nonstd::optional;
+using nonstd::nullopt;
+
+
   namespace threading {
 /** @brief specify the supported threading level.
  * 
@@ -150,7 +155,7 @@ class environment {
    *
    *  @returns The rank of the host process, if one exists.
    */
-  static std::optional<int> host_rank();
+  static optional<int> host_rank();
 
   /** Retrieves the rank of a process that can perform input/output.
    *
@@ -166,7 +171,7 @@ class environment {
    *  any_source if every process can perform I/O, or no value if no
    *  process can perform I/O.
    */
-  static std::optional<int> io_rank();
+  static optional<int> io_rank();
 
   /** Retrieve the name of this processor.
    *

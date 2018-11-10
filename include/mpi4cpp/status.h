@@ -1,10 +1,7 @@
 #pragma once
 
-#include <optional>
-
 
 namespace mpi4cpp { namespace mpi {
-
 
 class status 
 {
