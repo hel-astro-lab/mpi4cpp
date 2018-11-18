@@ -1,3 +1,5 @@
+#pragma once
+
 #include "request.h"
 
 namespace mpi4cpp { namespace mpi {
@@ -7,7 +9,8 @@ using nonstd::nullopt;
 
 //--------------------------------------------------
 
-request communicator::isend(int dest, int tag) const
+inline request 
+communicator::isend(int dest, int tag) const
 {
   request req;
 
@@ -18,7 +21,8 @@ request communicator::isend(int dest, int tag) const
 }
 
 
-request communicator::irecv(int source, int tag) const
+inline request 
+communicator::irecv(int source, int tag) const
 {
   request req;
   MPI_CHECK_RESULT(MPI_Irecv,
@@ -33,7 +37,7 @@ request communicator::irecv(int source, int tag) const
 // We're sending a type that has an associated MPI datatype, so we
 // map directly to that datatype.
 template<typename T>
-request
+inline request
 communicator::isend_impl(int dest, int tag, const T& value, mpl::true_) const
 {
   request req;
@@ -47,7 +51,8 @@ communicator::isend_impl(int dest, int tag, const T& value, mpl::true_) const
 // Single-element receive may either send the element directly or
 // serialize it via a buffer.
 template<typename T>
-request communicator::isend(int dest, int tag, const T& value) const
+inline request 
+communicator::isend(int dest, int tag, const T& value) const
 {
   return this->isend_impl(dest, tag, value, is_mpi_datatype<T>());
 }
@@ -56,7 +61,7 @@ request communicator::isend(int dest, int tag, const T& value) const
 // We're receiving a type that has an associated MPI datatype, so we
 // map directly to that datatype.
 template<typename T>
-request 
+inline request 
 communicator::irecv_impl(int source, int tag, T& value, mpl::true_) const
 {
   request req;
@@ -68,7 +73,7 @@ communicator::irecv_impl(int source, int tag, T& value, mpl::true_) const
 }
 
 template<typename T>
-request 
+inline request 
 communicator::irecv(int source, int tag, T& value) const
 {
   return this->irecv_impl(source, tag, value, is_mpi_datatype<T>());
@@ -80,13 +85,15 @@ communicator::irecv(int source, int tag, T& value) const
 // send/recv vector
   
 template<typename T, class A>
-request communicator::isend(int dest, int tag, const std::vector<T,A>& values) const
+inline request 
+communicator::isend(int dest, int tag, const std::vector<T,A>& values) const
 {
   return this->isend_vector(dest, tag, values, is_mpi_datatype<T>());
 }
 
+
 template<typename T, class A>
-request
+inline request
 communicator::isend_vector(int dest, int tag, const std::vector<T,A>& values,
                            mpl::true_) const
 {
@@ -99,6 +106,7 @@ communicator::isend_vector(int dest, int tag, const std::vector<T,A>& values,
   return req;
   
 }
+
 
 namespace detail {
   /**
@@ -128,7 +136,7 @@ namespace detail {
 }
 
 template<typename T, class A>
-optional<status> 
+inline optional<status> 
 request::handle_dynamic_primitive_array_irecv(request* self, request_action action)
 {
   typedef detail::dynamic_array_irecv_data<T,A> data_t;
@@ -180,7 +188,7 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
 
 
 template<typename T, class A>
-request::request(communicator const& comm, int source, int tag, std::vector<T,A>& values, mpl::true_ /*primitive*/)
+inline request::request(communicator const& comm, int source, int tag, std::vector<T,A>& values, mpl::true_ /*primitive*/)
   : m_data(new detail::dynamic_array_irecv_data<T,A>(comm, source, tag, values)),
     m_handler(handle_dynamic_primitive_array_irecv<T,A>)
 {
@@ -193,16 +201,18 @@ request::request(communicator const& comm, int source, int tag, std::vector<T,A>
                           source, tag, comm, &size_request()));
 }
 
+
 template<typename T, class A>
-request
+inline request
 communicator::irecv_vector(int source, int tag, std::vector<T,A>& values, 
                            mpl::true_ primitive) const
 {
   return request(*this, source, tag, values, primitive);
 }
 
+
 template<typename T, typename A>
-request
+inline request
 communicator::irecv(int source, int tag, std::vector<T,A>& values) const
 {
   return irecv_vector(source, tag, values, is_mpi_datatype<T>());
@@ -213,7 +223,7 @@ communicator::irecv(int source, int tag, std::vector<T,A>& values) const
 // send/recv array
   
 template<typename T>
-request
+inline request
 communicator::array_isend_impl(int dest, int tag, const T* values, int n,
                                mpl::true_) const
 {
@@ -227,14 +237,15 @@ communicator::array_isend_impl(int dest, int tag, const T* values, int n,
 
 // Array isend must send the elements directly
 template<typename T>
-request communicator::isend(int dest, int tag, const T* values, int n) const
+inline request 
+communicator::isend(int dest, int tag, const T* values, int n) const
 {
   return array_isend_impl(dest, tag, values, n, is_mpi_datatype<T>());
 }
 
 
 template<typename T>
-request 
+inline request 
 communicator::array_irecv_impl(int source, int tag, T* values, int n, 
                                mpl::true_) const
 {
@@ -248,7 +259,8 @@ communicator::array_irecv_impl(int source, int tag, T* values, int n,
 
 // Array receive must receive the elements directly into a buffer.
 template<typename T>
-request communicator::irecv(int source, int tag, T* values, int n) const
+inline request 
+communicator::irecv(int source, int tag, T* values, int n) const
 {
   return this->array_irecv_impl(source, tag, values, n, is_mpi_datatype<T>());
 }

@@ -11,7 +11,7 @@ using nonstd::optional;
 using nonstd::nullopt;
 
 
-request::request()
+inline request::request()
   : m_data(), m_handler(0)
 {
   m_requests[0] = MPI_REQUEST_NULL;
@@ -19,7 +19,7 @@ request::request()
 }
 
 //std::optional< std::reference_wrapper<MPI_Request> >
-MPI_Request*
+inline MPI_Request*
 request::trivial() {
   if ((!bool(m_handler) && m_requests[1] == MPI_REQUEST_NULL)) {
     return &m_requests[0];
@@ -28,12 +28,15 @@ request::trivial() {
   }
 }
 
-bool
+
+inline bool
 request::active() const {
   return m_requests[0] != MPI_REQUEST_NULL || m_requests[1] != MPI_REQUEST_NULL;
 }
 
-status request::wait()
+
+inline status 
+request::wait()
 {
   if (m_handler) {
     // This request is a receive for a serialized type. Use the
@@ -76,7 +79,9 @@ status request::wait()
   }
 }
 
-optional<status> request::test()
+
+inline optional<status> 
+request::test()
 {
   if (m_handler) {
     // This request is a receive for a serialized type. Use the
@@ -126,7 +131,8 @@ optional<status> request::test()
   }
 }
 
-void request::cancel()
+inline void 
+request::cancel()
 {
   if (m_handler) {
     m_handler(this, ra_cancel);

@@ -1,16 +1,20 @@
+#pragma once
+
 namespace mpi4cpp { namespace mpi {
 
 //--------------------------------------------------
 // send/recv no data
 
-void communicator::send(int dest, int tag) const
+inline void 
+communicator::send(int dest, int tag) const
 {
   MPI_CHECK_RESULT(MPI_Send,
                          (MPI_BOTTOM, 0, MPI_PACKED,
                           dest, tag, MPI_Comm(*this)));
 }
 
-status communicator::recv(int source, int tag) const
+inline status 
+communicator::recv(int source, int tag) const
 {
   status stat;
   MPI_CHECK_RESULT(MPI_Recv,
@@ -27,7 +31,7 @@ status communicator::recv(int source, int tag) const
 // We're sending a type that has an associated MPI datatype, so we
 // map directly to that datatype.
 template<typename T>
-void
+inline void
 communicator::send_impl(int dest, int tag, const T& value, mpl::true_) const
 {
   MPI_CHECK_RESULT(MPI_Send,
@@ -38,7 +42,8 @@ communicator::send_impl(int dest, int tag, const T& value, mpl::true_) const
 // We're receiving a type that has an associated MPI datatype, so we
 // map directly to that datatype.
 template<typename T>
-status communicator::recv_impl(int source, int tag, T& value, mpl::true_) const
+inline status 
+communicator::recv_impl(int source, int tag, T& value, mpl::true_) const
 {
   status stat;
 
@@ -54,7 +59,8 @@ status communicator::recv_impl(int source, int tag, T& value, mpl::true_) const
 // Single-element receive may either send the element directly or
 // serialize it via a buffer.
 template<typename T>
-void communicator::send(int dest, int tag, const T& value) const
+inline void 
+communicator::send(int dest, int tag, const T& value) const
 {
   this->send_impl(dest, tag, value, is_mpi_datatype<T>());
 }
@@ -62,7 +68,8 @@ void communicator::send(int dest, int tag, const T& value) const
 // Single-element receive may either receive the element directly or
 // deserialize it from a buffer.
 template<typename T>
-status communicator::recv(int source, int tag, T& value) const
+inline status 
+communicator::recv(int source, int tag, T& value) const
 {
   return this->recv_impl(source, tag, value, is_mpi_datatype<T>());
 }
@@ -72,7 +79,7 @@ status communicator::recv(int source, int tag, T& value) const
 // We're sending an array of a type that has an associated MPI
 // datatype, so we map directly to that datatype.
 template<typename T>
-void
+inline void
 communicator::array_send_impl(int dest, int tag, const T* values, int n,
                               mpl::true_) const
 {
@@ -83,7 +90,7 @@ communicator::array_send_impl(int dest, int tag, const T* values, int n,
 }
 
 template<typename T>
-status 
+inline status 
 communicator::array_recv_impl(int source, int tag, T* values, int n, 
                               mpl::true_) const
 {
@@ -100,7 +107,8 @@ communicator::array_recv_impl(int source, int tag, T* values, int n,
 // vector of a type has an associated MPI datatype, so we map directly to 
 // that datatype
 template<typename T, typename A>
-void communicator::send_vector(int dest, int tag, 
+inline void 
+communicator::send_vector(int dest, int tag, 
   const std::vector<T,A>& value, mpl::true_ true_type) const
 {
   // send the vector size
@@ -111,7 +119,8 @@ void communicator::send_vector(int dest, int tag,
 }
 
 template<typename T, typename A>
-status communicator::recv_vector(int source, int tag, 
+inline status 
+communicator::recv_vector(int source, int tag, 
   std::vector<T,A>& value, mpl::true_ true_type) const
 {
   // receive the vector size
@@ -126,13 +135,15 @@ status communicator::recv_vector(int source, int tag,
 //--------------------------------------------------
 
 template<typename T, typename A>
-void communicator::send(int dest, int tag, const std::vector<T,A>& value) const
+inline void 
+communicator::send(int dest, int tag, const std::vector<T,A>& value) const
 {
   send_vector(dest, tag, value, is_mpi_datatype<T>());
 }
 
 template<typename T, typename A>
-status communicator::recv(int source, int tag, std::vector<T,A>& value) const
+inline status 
+communicator::recv(int source, int tag, std::vector<T,A>& value) const
 {
   return recv_vector(source, tag, value, is_mpi_datatype<T>());
 }
@@ -141,14 +152,16 @@ status communicator::recv(int source, int tag, std::vector<T,A>& value) const
 
 // Array send must send the elements directly
 template<typename T>
-void communicator::send(int dest, int tag, const T* values, int n) const
+inline void 
+communicator::send(int dest, int tag, const T* values, int n) const
 {
   this->array_send_impl(dest, tag, values, n, is_mpi_datatype<T>());
 }
 
 // Array receive must receive the elements directly into a buffer.
 template<typename T>
-status communicator::recv(int source, int tag, T* values, int n) const
+inline status 
+communicator::recv(int source, int tag, T* values, int n) const
 {
   return this->array_recv_impl(source, tag, values, n, is_mpi_datatype<T>());
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "environment.h"
 #include "exception.h"
 
@@ -12,7 +14,7 @@ using nonstd::optional;
 using nonstd::nullopt;
 
 
-environment::environment(bool abort_on_exception)
+inline environment::environment(bool abort_on_exception)
   : i_initialized(false),
     abort_on_exception(abort_on_exception)
 {
@@ -24,7 +26,7 @@ environment::environment(bool abort_on_exception)
 }
 
 
-environment::environment(int& argc, char** &argv, bool abort_on_exception)
+inline environment::environment(int& argc, char** &argv, bool abort_on_exception)
   : i_initialized(false),
     abort_on_exception(abort_on_exception)
 {
@@ -36,7 +38,7 @@ environment::environment(int& argc, char** &argv, bool abort_on_exception)
 }
 
 
-environment::environment(int& argc, char** &argv, threading::level mt_level,
+inline environment::environment(int& argc, char** &argv, threading::level mt_level,
                          bool abort_on_exception)
   : i_initialized(false),
     abort_on_exception(abort_on_exception)
@@ -52,7 +54,7 @@ environment::environment(int& argc, char** &argv, threading::level mt_level,
 }
 
 
-environment::~environment()
+inline environment::~environment()
 {
   if (i_initialized) {
     if (std::uncaught_exception() && abort_on_exception) {
@@ -67,19 +69,22 @@ environment::~environment()
   }
 }
 
-void environment::abort(int errcode)
+inline void 
+environment::abort(int errcode)
 {
   MPI_CHECK_RESULT(MPI_Abort, (MPI_COMM_WORLD, errcode));
 }
 
-bool environment::initialized()
+inline bool 
+environment::initialized()
 {
   int flag;
   MPI_CHECK_RESULT(MPI_Initialized, (&flag));
   return flag != 0;
 }
 
-bool environment::finalized()
+inline bool 
+environment::finalized()
 {
   int flag;
   MPI_CHECK_RESULT(MPI_Finalized, (&flag));
@@ -87,7 +92,8 @@ bool environment::finalized()
 }
 
 
-int environment::max_tag()
+inline int 
+environment::max_tag()
 {
   int* max_tag_value;
   int found = 0;
@@ -99,13 +105,15 @@ int environment::max_tag()
 }
 
 
-int environment::collectives_tag()
+inline int 
+environment::collectives_tag()
 {
   return max_tag() + 1;
 }
 
 
-optional<int> environment::host_rank()
+inline optional<int> 
+environment::host_rank()
 {
   int* host;
   int found = 0;
@@ -118,7 +126,8 @@ optional<int> environment::host_rank()
     return *host;
 }
 
-optional<int> environment::io_rank()
+inline optional<int> 
+environment::io_rank()
 {
   int* io;
   int found = 0;
@@ -132,7 +141,8 @@ optional<int> environment::io_rank()
 }
 
 
-std::string environment::processor_name()
+inline std::string 
+environment::processor_name()
 {
   char name[MPI_MAX_PROCESSOR_NAME];
   int len;
@@ -142,7 +152,8 @@ std::string environment::processor_name()
 }
 
 
-threading::level environment::thread_level()
+inline threading::level 
+environment::thread_level()
 {
   int level;
 
@@ -151,7 +162,8 @@ threading::level environment::thread_level()
 }
 
 
-bool environment::is_main_thread()
+inline bool 
+environment::is_main_thread()
 {
   int isit;
 
@@ -159,7 +171,9 @@ bool environment::is_main_thread()
   return static_cast<bool>(isit);
 }
 
-std::pair<int, int> environment::version()
+
+inline std::pair<int, int> 
+environment::version()
 {
   int major, minor;
   MPI_CHECK_RESULT(MPI_Get_version, (&major, &minor));
