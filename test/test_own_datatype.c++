@@ -191,6 +191,9 @@ int main(int argc, char* argv[])
   bool f2 = test_vector_message(world);
   bool f3 = test_nonblocking_single_message(world);
 
+  assert(f1);
+  assert(f2);
+  assert(f3);
 
   return 0;
 }
