@@ -1,3 +1,4 @@
 [submodule "tools/optional-lite"]
 	path = tools/optional-lite
 	url = https://github.com/martinmoene/optional-lite.git
+    branch = master
