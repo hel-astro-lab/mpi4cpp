@@ -190,6 +190,7 @@ wait_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
   std::vector<status> results(num_outstanding_requests);
   std::vector<bool> completed(num_outstanding_requests);
 
+  std::cout << "wait_all: calling while loop...\n";
   while (num_outstanding_requests > 0) {
     bool all_trivial_requests = true;
     difference_type idx = 0;

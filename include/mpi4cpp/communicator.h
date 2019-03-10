@@ -624,7 +624,7 @@ class communicator
    * datatype, so we map directly to that datatype.
    */
   template<typename T>
-  request 
+  request
   array_isend_impl(int dest, int tag, const T* values, int n, 
                    mpl::true_) const;
 
@@ -633,7 +633,7 @@ class communicator
    * map directly to that datatype.
    */
   template<typename T>
-  request 
+  request
   array_irecv_impl(int source, int tag, T* values, int n, mpl::true_) const;
 
 

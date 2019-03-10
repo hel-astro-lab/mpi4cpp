@@ -27,6 +27,16 @@ class request
    */
   request();
 
+  request(request&  other);
+  request(const request&  other);
+
+  request(request&& other);
+
+  request& operator=(request&  other);
+  request& operator=(const request&  other);
+  request& operator=(request&& other);
+
+
   /**
    *  Constructs request for complex data.
    */
@@ -101,6 +111,12 @@ class request
   template<class T> std::shared_ptr<T>    data() { return std::static_pointer_cast<T>(m_data); }
   template<class T> void set_data(std::shared_ptr<T>& d) { m_data = d; }
 
+
+  /**
+   * Destructor that makes sure there are no messages left hanging 
+   */
+  ~request();
+
  private:
   enum request_action { ra_wait, ra_test, ra_cancel };
   typedef optional<status> (*handler_type)(request* self, 
@@ -126,6 +142,8 @@ class request
   template<typename T, class A>
   static optional<status> 
   handle_dynamic_primitive_array_irecv(request* self, request_action action);
+
+
 
  private:
   MPI_Request           m_requests[2];

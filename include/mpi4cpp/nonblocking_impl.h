@@ -9,7 +9,7 @@ using nonstd::nullopt;
 
 //--------------------------------------------------
 
-inline request 
+inline request
 communicator::isend(int dest, int tag) const
 {
   request req;
@@ -21,7 +21,7 @@ communicator::isend(int dest, int tag) const
 }
 
 
-inline request 
+inline request
 communicator::irecv(int source, int tag) const
 {
   request req;
@@ -51,7 +51,7 @@ communicator::isend_impl(int dest, int tag, const T& value, mpl::true_) const
 // Single-element receive may either send the element directly or
 // serialize it via a buffer.
 template<typename T>
-inline request 
+inline request
 communicator::isend(int dest, int tag, const T& value) const
 {
   return this->isend_impl(dest, tag, value, is_mpi_datatype<T>());
@@ -61,7 +61,7 @@ communicator::isend(int dest, int tag, const T& value) const
 // We're receiving a type that has an associated MPI datatype, so we
 // map directly to that datatype.
 template<typename T>
-inline request 
+inline request
 communicator::irecv_impl(int source, int tag, T& value, mpl::true_) const
 {
   request req;
@@ -73,7 +73,7 @@ communicator::irecv_impl(int source, int tag, T& value, mpl::true_) const
 }
 
 template<typename T>
-inline request 
+inline request
 communicator::irecv(int source, int tag, T& value) const
 {
   return this->irecv_impl(source, tag, value, is_mpi_datatype<T>());
@@ -85,7 +85,7 @@ communicator::irecv(int source, int tag, T& value) const
 // send/recv vector
   
 template<typename T, class A>
-inline request 
+inline request
 communicator::isend(int dest, int tag, const std::vector<T,A>& values) const
 {
   return this->isend_vector(dest, tag, values, is_mpi_datatype<T>());
@@ -237,7 +237,7 @@ communicator::array_isend_impl(int dest, int tag, const T* values, int n,
 
 // Array isend must send the elements directly
 template<typename T>
-inline request 
+inline request
 communicator::isend(int dest, int tag, const T* values, int n) const
 {
   return array_isend_impl(dest, tag, values, n, is_mpi_datatype<T>());
@@ -245,7 +245,7 @@ communicator::isend(int dest, int tag, const T* values, int n) const
 
 
 template<typename T>
-inline request 
+inline request
 communicator::array_irecv_impl(int source, int tag, T* values, int n, 
                                mpl::true_) const
 {
@@ -259,7 +259,7 @@ communicator::array_irecv_impl(int source, int tag, T* values, int n,
 
 // Array receive must receive the elements directly into a buffer.
 template<typename T>
-inline request 
+inline request
 communicator::irecv(int source, int tag, T* values, int n) const
 {
   return this->array_irecv_impl(source, tag, values, n, is_mpi_datatype<T>());
