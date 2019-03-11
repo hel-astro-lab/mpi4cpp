@@ -27,9 +27,8 @@ class request
    */
   request();
 
-  request(request&  other);
+  //request(request&  other);
   request(const request&  other);
-
   request(request&& other);
 
   request& operator=(request&  other);
@@ -149,6 +148,8 @@ class request
   MPI_Request           m_requests[2];
   std::shared_ptr<void> m_data;
   handler_type          m_handler;
+
+  int                   m_touch=0;
 };
 
 } } // end namespace mpi4cpp::mpi
