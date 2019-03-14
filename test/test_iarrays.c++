@@ -150,17 +150,15 @@ int main(int argc, char* argv[])
   mpi::environment env(argc, argv);
   mpi::communicator world;
 
-  bool fs[9];
-
-  fs[0] = test_all_arrays<short>(world);
-  fs[1] = test_all_arrays<int>(world);
-  fs[2] = test_all_arrays<long>(world);
-  fs[3] = test_all_arrays<float>(world);
-  fs[4] = test_all_arrays<double>(world);
-  fs[5] = test_all_arrays<long double>(world);
-  fs[6] = test_all_arrays<unsigned short>(world);
-  fs[7] = test_all_arrays<unsigned>(world);
-  fs[8] = test_all_arrays<unsigned long>(world);
+  test_all_arrays<short>(world);
+  test_all_arrays<int>(world);
+  test_all_arrays<long>(world);
+  test_all_arrays<float>(world);
+  test_all_arrays<double>(world);
+  test_all_arrays<long double>(world);
+  test_all_arrays<unsigned short>(world);
+  test_all_arrays<unsigned>(world);
+  test_all_arrays<unsigned long>(world);
 
 
   std::cout << "success!\n";
