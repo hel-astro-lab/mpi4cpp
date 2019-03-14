@@ -39,8 +39,7 @@ inline request::request(const request& other)
   m_data    = std::move(other.m_data);
   m_requests[0] = std::move(other.m_requests[0]);
   m_requests[1] = std::move(other.m_requests[1]);
-
-  m_touch = 1;
+  m_touch += 1;
 
   //other.m_handler = 0;
   //other.m_data = nullptr;
@@ -52,18 +51,31 @@ inline request::request(request&& other)
 {
   // std::vector calls mainly this...
   //std::cout<<"calling user-defined move operator\n";
+
+  //if(!other.active()) {
+  //  std::cout << "other is not active... with " << other.m_touch << "\n";
+  //  assert(false);
+  //}
+
+  //if(active()) {
+  //  std::cout << "moving on top of active with " << m_touch << "\n";
+  //  if( m_requests[0] == other.m_requests[0] ) std::cout << "req 0 equal\n";
+  //  if( m_requests[1] == other.m_requests[1] ) std::cout << "req 1 equal\n";
+  //  assert(false);
+  //}
+
   m_handler = std::move(other.m_handler);
   m_data    = std::move(other.m_data);
   m_requests[0] = std::move(other.m_requests[0]);
   m_requests[1] = std::move(other.m_requests[1]);
-  m_touch = 2;
+  m_touch += 10;
 
   // empty out the other
   other.m_handler = 0;
   other.m_data = nullptr;
   other.m_requests[0] = MPI_REQUEST_NULL;
   other.m_requests[1] = MPI_REQUEST_NULL;
-  other.m_touch = 3;
+  other.m_touch += 100;
 }
 
 inline request& request::operator=(request& /*other*/)
@@ -89,14 +101,14 @@ inline request& request::operator=(request&& other)
   m_data    = std::move(other.m_data);
   m_requests[0] = std::move(other.m_requests[0]);
   m_requests[1] = std::move(other.m_requests[1]);
-  m_touch = 4;
+  m_touch += 1000;
 
   // empty out the other
   other.m_handler = 0;
   other.m_data = nullptr;
   other.m_requests[0] = MPI_REQUEST_NULL;
   other.m_requests[1] = MPI_REQUEST_NULL;
-  other.m_touch = 5;
+  other.m_touch += 10000;
 
   //other.m_handler = m_handler;
   //other.m_data    = m_data;
@@ -273,11 +285,16 @@ request::~request()
         // test if this is finished
         status result;
         int flag = 0;
-        std::cout << " error is: " << m_requests[0] << "\n";
+        //std::cout << " error is: " << m_requests[0] << "\n";
         MPI_CHECK_RESULT(MPI_Test, (&m_requests[0], &flag, &result.m_status));
         if (!flag) {
-          std::cout << "XXX: - - - - error detected with message destructor; message 1 is not destroyed "<< m_touch << "\n";
-          assert(false);
+          //bool is_nullf = (m_requests[0] == MPI_REQUEST_NULL);
+          //std::cout << "XXX: - - - - error detected with message destructor; message 1 is not destroyed "<< m_touch << " " << is_nullf << "\n";
+          //assert(false);
+
+          //status result;
+          //MPI_CHECK_RESULT(MPI_Wait, (&m_requests[0], &result.m_status));
+          //MPI_Request_free( &m_requests[0]);
         }
       }
     }
@@ -289,13 +306,16 @@ request::~request()
         int flag = 0;
         MPI_CHECK_RESULT(MPI_Test, (&m_requests[1], &flag, &result.m_status));
         if (!flag) {
-          std::cout << "YYY:     - - - - error detected with message destructor; message 2 is not destroyed " << m_touch << \n";
-          assert(false);
-        }
+          //bool is_nullf = (m_requests[1] == MPI_REQUEST_NULL);
+          //std::cout << "YYY:     - - - - error detected with message destructor; message 2 is not destroyed " << m_touch << " " << is_nullf << "\n";
+          //assert(false);
 
+          //status result;
+          //MPI_CHECK_RESULT(MPI_Wait, (&m_requests[1], &result.m_status));
+          //MPI_Request_free( &m_requests[1]);
+        }
       }
     }
-
   }
 
 }
