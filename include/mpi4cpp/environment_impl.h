@@ -18,7 +18,11 @@ inline environment::environment(bool abort_on_exception)
   : i_initialized(false),
     abort_on_exception(abort_on_exception)
 {
-  if (!initialized()) {
+  if(!initialized()) {
+    int flag=-2;
+    MPI_Initialized(&flag);
+    //std::cout << "mpi_init " << flag << "\n";
+
     MPI_CHECK_RESULT(MPI_Init, (0, 0));
     i_initialized = true;
   }
@@ -31,6 +35,7 @@ inline environment::environment(int& argc, char** &argv, bool abort_on_exception
     abort_on_exception(abort_on_exception)
 {
   if (!initialized()) {
+    //std::cout << "mpi_init2\n";
     MPI_CHECK_RESULT(MPI_Init, (&argc, &argv));
     i_initialized = true;
   }
@@ -46,6 +51,7 @@ inline environment::environment(int& argc, char** &argv, threading::level mt_lev
   // It is not clear that we can pass null in MPI_Init_thread.
   int dummy_thread_level = 0;
   if (!initialized()) {
+    //std::cout << "mpi_init3\n";
     MPI_CHECK_RESULT(MPI_Init_thread, 
                            (&argc, &argv, int(mt_level), &dummy_thread_level));
     i_initialized = true;

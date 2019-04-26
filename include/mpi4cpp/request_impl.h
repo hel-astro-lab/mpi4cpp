@@ -149,8 +149,4 @@ request::cancel()
 
 
 
-
-
-
-
 } } // end namespace mpi4cpp::mpi
