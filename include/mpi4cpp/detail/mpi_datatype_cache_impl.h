@@ -22,7 +22,7 @@ inline void mpi_datatype_map::clear()
 {
   // do not free after call to MPI_FInalize
   int finalized=0;
-  //BOOST_MPI_CHECK_RESULT(MPI_Finalized,(&finalized));
+  MPI_CHECK_RESULT(MPI_Finalized,(&finalized));
     
   if (!finalized) {
     // ignore errors in the destructor
