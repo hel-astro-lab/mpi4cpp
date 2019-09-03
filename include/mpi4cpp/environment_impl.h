@@ -67,8 +67,7 @@ inline environment::~environment()
       abort(-1);
     } else if (!finalized()) {
 
-      // TODO
-      //detail::mpi_datatype_cache().clear();
+      detail::mpi_datatype_cache().clear();
 
       MPI_CHECK_RESULT(MPI_Finalize, ());
     }

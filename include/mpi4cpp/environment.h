@@ -4,6 +4,7 @@
 //#include <optional>
 #include <nonstd/optional.hpp>
 
+#include "mpi4cpp/detail/mpi_datatype_cache.h"
 
 
 namespace mpi4cpp { namespace mpi {
