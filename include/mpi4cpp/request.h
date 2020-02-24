@@ -130,7 +130,7 @@ class request
  private:
   MPI_Request           m_requests[2];
   std::shared_ptr<void> m_data;
-  handler_type          m_handler;
+  handler_type          m_handler{0};
 };
 
 } } // end namespace mpi4cpp::mpi

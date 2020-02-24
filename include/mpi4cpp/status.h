@@ -7,7 +7,7 @@ class status
 {
   public:
 
-  status() : m_count(-1) { }
+  status()  { }
 
   status(MPI_Status const& s) : m_status(s), m_count(-1) {}
 
@@ -64,7 +64,7 @@ class status
 
   /// INTERNAL ONLY
   mutable MPI_Status m_status;
-  mutable int m_count;
+  mutable int m_count{-1};
 
   friend class communicator;
   //friend class request;

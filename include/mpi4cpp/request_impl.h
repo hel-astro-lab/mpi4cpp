@@ -12,7 +12,7 @@ using nonstd::nullopt;
 
 
 inline request::request()
-  : m_data(), m_handler(0)
+  : m_data() 
 {
   m_requests[0] = MPI_REQUEST_NULL;
   m_requests[1] = MPI_REQUEST_NULL;

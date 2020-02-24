@@ -15,7 +15,7 @@ using nonstd::nullopt;
 
 
 inline environment::environment(bool abort_on_exception)
-  : i_initialized(false),
+  : 
     abort_on_exception(abort_on_exception)
 {
   if(!initialized()) {

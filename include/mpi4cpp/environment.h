@@ -201,7 +201,7 @@ class environment {
 
 private:
   /// Whether this environment object called MPI_Init
-  bool i_initialized;
+  bool i_initialized{false};
 
   /// Whether we should abort if the destructor is
   bool abort_on_exception;
