@@ -378,7 +378,7 @@ class communicator
   {
     void operator()(MPI_Comm* comm) const
     {
-      assert( comm != 0 );
+      assert( comm != nullptr );
       assert(*comm != MPI_COMM_NULL);
       int finalized;
       MPI_CHECK_RESULT(MPI_Finalized, (&finalized));

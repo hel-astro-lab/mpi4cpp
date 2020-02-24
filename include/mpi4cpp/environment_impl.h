@@ -23,7 +23,7 @@ inline environment::environment(bool abort_on_exception)
     MPI_Initialized(&flag);
     //std::cout << "mpi_init " << flag << "\n";
 
-    MPI_CHECK_RESULT(MPI_Init, (0, 0));
+    MPI_CHECK_RESULT(MPI_Init, (nullptr, nullptr));
     i_initialized = true;
   }
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
