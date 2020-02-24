@@ -51,8 +51,7 @@ wait_any(ForwardIterator first, ForwardIterator last)
 
   assert(first != last);
   
-  typedef typename std::iterator_traits<ForwardIterator>::difference_type
-    difference_type;
+  using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
 
   bool all_trivial_requests = true;
   difference_type n = 0;
@@ -180,8 +179,7 @@ template<typename ForwardIterator, typename OutputIterator>
 OutputIterator 
 wait_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
 {
-  typedef typename std::iterator_traits<ForwardIterator>::difference_type
-    difference_type;
+  using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
 
   using std::distance;
 
@@ -249,8 +247,7 @@ template<typename ForwardIterator>
 void
 wait_all(ForwardIterator first, ForwardIterator last)
 {
-  typedef typename std::iterator_traits<ForwardIterator>::difference_type
-    difference_type;
+  using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
 
   using std::distance;
 
@@ -420,8 +417,7 @@ wait_some(BidirectionalIterator first, BidirectionalIterator last,
   if (first == last)
     return std::make_pair(out, first);
   
-  typedef typename std::iterator_traits<BidirectionalIterator>::difference_type
-    difference_type;
+  using difference_type = typename std::iterator_traits<BidirectionalIterator>::difference_type;
 
   bool all_trivial_requests = true;
   difference_type n = 0;
@@ -540,8 +536,7 @@ wait_some(BidirectionalIterator first, BidirectionalIterator last)
   if (first == last)
     return first;
   
-  typedef typename std::iterator_traits<BidirectionalIterator>::difference_type
-    difference_type;
+  using difference_type = typename std::iterator_traits<BidirectionalIterator>::difference_type;
 
   bool all_trivial_requests = true;
   difference_type n = 0;
