@@ -226,7 +226,7 @@ wait_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
                        (num_outstanding_requests, &requests[0], 
                        &stats[0]));
 
-      for (std::vector<MPI_Status>::iterator i = stats.begin(); 
+      for (auto i = stats.begin(); 
            i != stats.end(); ++i, ++out) {
         status stat;
         stat.m_status = *i;

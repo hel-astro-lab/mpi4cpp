@@ -26,7 +26,7 @@ inline void mpi_datatype_map::clear()
     
   if (!finalized) {
     // ignore errors in the destructor
-    for (stored_map_type::iterator it=impl->map.begin(); it != impl->map.end(); ++it)
+    for (auto it=impl->map.begin(); it != impl->map.end(); ++it)
       MPI_Type_free(&(it->second));
   }
 }
@@ -40,7 +40,7 @@ inline mpi_datatype_map::~mpi_datatype_map()
 
 inline MPI_Datatype mpi_datatype_map::get(const std::type_info* t)
 {
-    stored_map_type::iterator pos = impl->map.find(t);
+    auto pos = impl->map.find(t);
     if (pos != impl->map.end())
         return pos->second;
     else
