@@ -21,7 +21,7 @@ namespace mpi4cpp { namespace mpi {
 class MPIerror : public std::exception
 {
   public:
-  MPIerror() {};
+  MPIerror() = default;
 };
 
 class MPI_Waitall_Error : MPIerror

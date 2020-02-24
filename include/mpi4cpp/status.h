@@ -7,7 +7,7 @@ class status
 {
   public:
 
-  status()  { }
+  status()  = default;
 
   status(MPI_Status const& s) : m_status(s), m_count(-1) {}
 
