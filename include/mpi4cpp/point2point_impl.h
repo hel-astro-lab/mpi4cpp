@@ -32,7 +32,7 @@ communicator::recv(int source, int tag) const
 // map directly to that datatype.
 template<typename T>
 inline void
-communicator::send_impl(int dest, int tag, const T& value, mpl::true_) const
+communicator::send_impl(int dest, int tag, const T& value, mpl::true_ /*unused*/) const
 {
   MPI_CHECK_RESULT(MPI_Send,
                   (const_cast<T*>(&value), 1, get_mpi_datatype<T>(value),
@@ -43,7 +43,7 @@ communicator::send_impl(int dest, int tag, const T& value, mpl::true_) const
 // map directly to that datatype.
 template<typename T>
 inline status 
-communicator::recv_impl(int source, int tag, T& value, mpl::true_) const
+communicator::recv_impl(int source, int tag, T& value, mpl::true_ /*unused*/) const
 {
   status stat;
 
@@ -81,7 +81,7 @@ communicator::recv(int source, int tag, T& value) const
 template<typename T>
 inline void
 communicator::array_send_impl(int dest, int tag, const T* values, int n,
-                              mpl::true_) const
+                              mpl::true_ /*unused*/) const
 {
   MPI_CHECK_RESULT(MPI_Send,
                   (const_cast<T*>(values), n, 
@@ -92,7 +92,7 @@ communicator::array_send_impl(int dest, int tag, const T* values, int n,
 template<typename T>
 inline status 
 communicator::array_recv_impl(int source, int tag, T* values, int n, 
-                              mpl::true_) const
+                              mpl::true_ /*unused*/) const
 {
   status stat;
   MPI_CHECK_RESULT(MPI_Recv,

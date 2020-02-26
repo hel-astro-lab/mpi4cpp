@@ -219,7 +219,7 @@ namespace detail {
 
 /// Support for bool. There is no corresponding MPI_BOOL.
 template<>
-inline MPI_Datatype get_mpi_datatype<bool>(const bool&)
+inline MPI_Datatype get_mpi_datatype<bool>(const bool& /*unused*/)
 {
   static MPI_Datatype type = detail::build_mpi_datatype_for_bool();
   return type;

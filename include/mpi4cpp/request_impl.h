@@ -12,7 +12,7 @@ using nonstd::nullopt;
 
 
 inline request::request()
-  : m_data() 
+   
 {
   m_requests[0] = MPI_REQUEST_NULL;
   m_requests[1] = MPI_REQUEST_NULL;
@@ -38,7 +38,7 @@ request::active() const {
 inline status 
 request::wait()
 {
-  if (m_handler) {
+  if (m_handler != nullptr) {
     // This request is a receive for a serialized type. Use the
     // handler to wait for completion.
     return *m_handler(this, ra_wait);
@@ -83,7 +83,7 @@ request::wait()
 inline optional<status> 
 request::test()
 {
-  if (m_handler) {
+  if (m_handler != nullptr) {
     // This request is a receive for a serialized type. Use the
     // handler to test for completion.
     return m_handler(this, ra_test);
@@ -134,7 +134,7 @@ request::test()
 inline void 
 request::cancel()
 {
-  if (m_handler) {
+  if (m_handler != nullptr) {
     m_handler(this, ra_cancel);
   } else {
     MPI_CHECK_RESULT(MPI_Cancel, (&m_requests[0]));

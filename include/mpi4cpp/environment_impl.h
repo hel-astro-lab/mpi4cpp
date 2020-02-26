@@ -125,7 +125,7 @@ environment::host_rank()
 
   MPI_CHECK_RESULT(MPI_Comm_get_attr,
                          (MPI_COMM_WORLD, MPI_HOST, &host, &found));
-  if (!found || *host == MPI_PROC_NULL)
+  if ((found == 0) || *host == MPI_PROC_NULL)
     return optional<int>();
   else
     return *host;
@@ -139,7 +139,7 @@ environment::io_rank()
 
   MPI_CHECK_RESULT(MPI_Comm_get_attr,
                          (MPI_COMM_WORLD, MPI_IO, &io, &found));
-  if (!found || *io == MPI_PROC_NULL)
+  if ((found == 0) || *io == MPI_PROC_NULL)
     return optional<int>();
   else
     return *io;

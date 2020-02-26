@@ -24,7 +24,7 @@ inline void mpi_datatype_map::clear()
   int finalized=0;
   MPI_CHECK_RESULT(MPI_Finalized,(&finalized));
     
-  if (!finalized) {
+  if (finalized == 0) {
     // ignore errors in the destructor
     for (auto & it : impl->map)
       MPI_Type_free(&(it.second));

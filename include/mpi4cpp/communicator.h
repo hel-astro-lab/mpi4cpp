@@ -359,10 +359,10 @@ class communicator
 
   template<typename T, typename A>
   void send_vector(int dest, int tag, const std::vector<T,A>& value, 
-		   mpl::true_) const;
+		   mpl::true_ /*true_type*/) const;
   template<typename T, typename A>
   status recv_vector(int source, int tag, std::vector<T,A>& value,
-		     mpl::true_) const;
+		     mpl::true_ /*true_type*/) const;
 
 
   protected:
@@ -382,7 +382,7 @@ class communicator
       assert(*comm != MPI_COMM_NULL);
       int finalized;
       MPI_CHECK_RESULT(MPI_Finalized, (&finalized));
-      if (!finalized)
+      if (finalized == 0)
         MPI_CHECK_RESULT(MPI_Comm_free, (comm));
       delete comm;
     }
@@ -396,14 +396,14 @@ class communicator
    * map directly to that datatype.
    */
   template<typename T>
-  void send_impl(int dest, int tag, const T& value, mpl::true_) const;
+  void send_impl(int dest, int tag, const T& value, mpl::true_ /*unused*/) const;
 
   /**
    * We're receiving a type that has an associated MPI datatype, so we
    * map directly to that datatype.
    */
   template<typename T>
-  status recv_impl(int source, int tag, T& value, mpl::true_) const;
+  status recv_impl(int source, int tag, T& value, mpl::true_ /*unused*/) const;
 
   //--------------------------------------------------
 
@@ -413,7 +413,7 @@ class communicator
    */
   template<typename T>
   void 
-  array_send_impl(int dest, int tag, const T* values, int n, mpl::true_) const;
+  array_send_impl(int dest, int tag, const T* values, int n, mpl::true_ /*unused*/) const;
 
   /**
    * We're receiving an array of a type that has an associated MPI
@@ -421,7 +421,7 @@ class communicator
    */
   template<typename T>
   status 
-  array_recv_impl(int source, int tag, T* values, int n, mpl::true_) const;
+  array_recv_impl(int source, int tag, T* values, int n, mpl::true_ /*unused*/) const;
 
   //--------------------------------------------------
   // Non-blocking communications
@@ -609,14 +609,14 @@ class communicator
    * map directly to that datatype.
    */
   template<typename T>
-  request isend_impl(int dest, int tag, const T& value, mpl::true_) const;
+  request isend_impl(int dest, int tag, const T& value, mpl::true_ /*unused*/) const;
 
   /*
    * We're receiving a type that has an associated MPI datatype, so we
    * map directly to that datatype.
    */
   template<typename T>
-  request irecv_impl(int source, int tag, T& value, mpl::true_) const;
+  request irecv_impl(int source, int tag, T& value, mpl::true_ /*unused*/) const;
 
 
   /**
@@ -626,7 +626,7 @@ class communicator
   template<typename T>
   request 
   array_isend_impl(int dest, int tag, const T* values, int n, 
-                   mpl::true_) const;
+                   mpl::true_ /*unused*/) const;
 
   /**
    * We're receiving a type that has an associated MPI datatype, so we
@@ -634,7 +634,7 @@ class communicator
    */
   template<typename T>
   request 
-  array_irecv_impl(int source, int tag, T* values, int n, mpl::true_) const;
+  array_irecv_impl(int source, int tag, T* values, int n, mpl::true_ /*unused*/) const;
 
 
   // We're sending/receivig a vector with associated MPI datatype.
@@ -642,11 +642,11 @@ class communicator
   // blocking and non blocking method agrees on the format.
   template<typename T, typename A>
   request irecv_vector(int source, int tag, std::vector<T,A>& values, 
-                       mpl::true_) const;
+                       mpl::true_ /*primitive*/) const;
 
   template<typename T, class A>
   request isend_vector(int dest, int tag, const std::vector<T,A>& values,
-                       mpl::true_) const;
+                       mpl::true_ /*unused*/) const;
 
 
   

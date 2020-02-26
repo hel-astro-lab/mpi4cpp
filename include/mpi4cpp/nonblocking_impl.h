@@ -38,7 +38,7 @@ communicator::irecv(int source, int tag) const
 // map directly to that datatype.
 template<typename T>
 inline request
-communicator::isend_impl(int dest, int tag, const T& value, mpl::true_) const
+communicator::isend_impl(int dest, int tag, const T& value, mpl::true_ /*unused*/) const
 {
   request req;
   MPI_CHECK_RESULT(MPI_Isend,
@@ -62,7 +62,7 @@ communicator::isend(int dest, int tag, const T& value) const
 // map directly to that datatype.
 template<typename T>
 inline request 
-communicator::irecv_impl(int source, int tag, T& value, mpl::true_) const
+communicator::irecv_impl(int source, int tag, T& value, mpl::true_ /*unused*/) const
 {
   request req;
   MPI_CHECK_RESULT(MPI_Irecv,
@@ -95,7 +95,7 @@ communicator::isend(int dest, int tag, const std::vector<T,A>& values) const
 template<typename T, class A>
 inline request
 communicator::isend_vector(int dest, int tag, const std::vector<T,A>& values,
-                           mpl::true_) const
+                           mpl::true_ /*unused*/) const
 {
   std::size_t size = values.size();
   request req = this->isend_impl(dest, tag, size, mpl::true_());
@@ -225,7 +225,7 @@ communicator::irecv(int source, int tag, std::vector<T,A>& values) const
 template<typename T>
 inline request
 communicator::array_isend_impl(int dest, int tag, const T* values, int n,
-                               mpl::true_) const
+                               mpl::true_ /*unused*/) const
 {
   request req;
   MPI_CHECK_RESULT(MPI_Isend,
@@ -247,7 +247,7 @@ communicator::isend(int dest, int tag, const T* values, int n) const
 template<typename T>
 inline request 
 communicator::array_irecv_impl(int source, int tag, T* values, int n, 
-                               mpl::true_) const
+                               mpl::true_ /*unused*/) const
 {
   request req;
   MPI_CHECK_RESULT(MPI_Irecv,

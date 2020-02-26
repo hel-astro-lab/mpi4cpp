@@ -40,7 +40,7 @@ public:
   // TODO: not used; SFINAE fails
   template <class T>
   MPI_Datatype datatype(const T& x = T(), 
-      typename std::enable_if<is_mpi_builtin_datatype<T>::type >::type* =0)
+      typename std::enable_if<is_mpi_builtin_datatype<T>::type >::type*  /*unused*/=0)
   {
     return get_mpi_datatype<T>(x);
   }
@@ -52,7 +52,7 @@ public:
       typename std::enable_if<
         is_mpi_builtin_datatype<
           typename std::remove_all_extents<T>::type
-        >::type >::type* =0)
+        >::type >::type*  /*unused*/=0)
   {
     return get_mpi_datatype<T>(x);
   }
@@ -62,7 +62,7 @@ public:
   // TODO: not used; SFINAE fails
   template <class T>
   MPI_Datatype datatype(const T&  /*x*/ =T(), 
-      typename std::enable_if<!is_mpi_builtin_datatype<T>::type >::type* =0 )
+      typename std::enable_if<!is_mpi_builtin_datatype<T>::type >::type*  /*unused*/=0 )
   {
     //BOOST_MPL_ASSERT((is_mpi_datatype<T>));
 
