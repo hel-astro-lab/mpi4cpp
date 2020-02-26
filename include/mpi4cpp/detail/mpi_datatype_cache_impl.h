@@ -26,8 +26,8 @@ inline void mpi_datatype_map::clear()
     
   if (!finalized) {
     // ignore errors in the destructor
-    for (auto it=impl->map.begin(); it != impl->map.end(); ++it)
-      MPI_Type_free(&(it->second));
+    for (auto & it : impl->map)
+      MPI_Type_free(&(it.second));
   }
 }
 
