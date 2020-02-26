@@ -61,7 +61,7 @@ public:
   /// getting datatype if not primitive
   // TODO: not used; SFINAE fails
   template <class T>
-  MPI_Datatype datatype(const T& x =T(), 
+  MPI_Datatype datatype(const T&  /*x*/ =T(), 
       typename std::enable_if<!is_mpi_builtin_datatype<T>::type >::type* =0 )
   {
     //BOOST_MPL_ASSERT((is_mpi_datatype<T>));
