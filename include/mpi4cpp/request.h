@@ -103,8 +103,7 @@ class request
 
  private:
   enum request_action { ra_wait, ra_test, ra_cancel };
-  typedef optional<status> (*handler_type)(request* self, 
-                                           request_action action);
+  using handler_type = optional<status> (*)(request *, request_action);
 
   /**
    * Handles the non-blocking receive of a serialized value.
