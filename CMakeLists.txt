@@ -45,6 +45,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tools/optional-lite/include )
 
 
 enable_testing()
-add_subdirectory(test)
+add_subdirectory(test EXCLUDE_FROM_ALL)
 
 
