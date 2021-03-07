@@ -63,7 +63,7 @@ inline environment::environment(int& argc, char** &argv, threading::level mt_lev
 inline environment::~environment()
 {
   if (i_initialized) {
-    if (std::uncaught_exception() && abort_on_exception) {
+    if ((std::uncaught_exceptions() > 0) && abort_on_exception) {
       abort(-1);
     } else if (!finalized()) {
 
