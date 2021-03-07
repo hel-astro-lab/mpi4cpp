@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <typeinfo>
+#include <assert.h>
 
 #include "mpi4cpp/datatype_fwd.h"
 #include "mpi4cpp/exception.h"
