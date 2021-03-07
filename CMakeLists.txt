@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.0)
 
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
@@ -45,6 +45,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tools/optional-lite/include )
 
 
 enable_testing()
-add_subdirectory(test EXCLUDE_FROM_ALL)
+#add_subdirectory(test EXCLUDE_FROM_ALL)
+add_subdirectory(test)
 
 
