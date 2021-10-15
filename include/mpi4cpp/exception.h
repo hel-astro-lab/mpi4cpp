@@ -2,6 +2,8 @@
 
 #include <exception>
 #include <iostream>
+#include <cstdio>
+
 
 /**
  * Call the MPI routine MPIFunc with arguments Args (surrounded by
@@ -10,9 +12,15 @@
 #define MPI_CHECK_RESULT( MPIFunc, Args )                               \
  {                                                                      \
    int _check_result = MPIFunc Args;                                    \
+   if(_check_result != MPI_SUCCESS) {                                   \
+     char _estring[MPI_MAX_ERROR_STRING];                               \
+     int _len, _eclass;                                                 \
+     MPI_Error_class(_check_result, &_eclass);                          \
+     MPI_Error_string(_check_result, _estring, &_len);                  \
+     printf("MPI Error %d: %s\n", _eclass, _estring);fflush(stdout);    \
+   }                                                                    \
    assert(_check_result == MPI_SUCCESS);                                \
  }
-
 
 
 namespace mpi4cpp { namespace mpi {
