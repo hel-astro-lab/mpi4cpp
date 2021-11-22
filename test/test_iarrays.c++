@@ -75,29 +75,44 @@ bool test_array(mpi::communicator& world)
 template<typename T>
 bool test_vector(mpi::communicator& world)
 {
-  std::vector<T> msg;
-  msg.resize(NX);
+  std::vector<T> smsg;
+  smsg.resize(NX);
+
+  std::vector<T> rmsg;
+  rmsg.resize(NX);
+
+  for(int i=0; i<NX; i++) rmsg[i] = static_cast<T>(3); // indicate error with 3
 
   requests reqs(2);
 
   if (world.rank() == 0) {
-    for(int i=0; i<NX; i++) msg[i] = static_cast<T>(1);
-    reqs[0] = world.isend(1, 0, msg);
-    reqs[1] = world.irecv(1, 1, msg);
+    for(int i=0; i<NX; i++) smsg[i] = static_cast<T>(1);
+
+    reqs[0] = world.isend(1, 0, smsg);
+    reqs[1] = world.irecv(1, 1, rmsg);
   } else {
-    for(int i=0; i<NX; i++) msg[i] = static_cast<T>(2);
-    reqs[0] = world.isend(0, 1, msg);
-    reqs[1] = world.irecv(0, 0, msg);
+    for(int i=0; i<NX; i++) smsg[i] = static_cast<T>(2);
+    reqs[0] = world.isend(0, 1, smsg);
+    reqs[1] = world.irecv(0, 0, rmsg);
   }
 
   mpi::wait_all(reqs.begin(), reqs.end());
   
   if (world.rank() == 0) {
-    for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(2) );
-    std::cout << "rank " << world.rank() << " got message " << msg[0] << std::endl;
+
+    for(int i=0; i<NX; i++) 
+        if(!(rmsg[i] == static_cast<T>(2))) std::cout << "Got erraneous value for rank 0 at :" << i << " : " << rmsg[i] << " vs " << static_cast<T>(2) << "\n";
+
+    for(int i=0; i<NX; i++) assert(rmsg[i] == static_cast<T>(2) );
+    //std::cout << "rank " << world.rank() << " got message " << rmsg[0] << std::endl;
   } else {
-    for(int i=0; i<NX; i++) assert(msg[i] == static_cast<T>(1) );
-    std::cout << "rank " << world.rank() << " got message " << msg[0] << std::endl;
+
+    for(int i=0; i<NX; i++) 
+        if(!(rmsg[i] == static_cast<T>(1))) std::cout << "Got erraneous value for rank 1 at :" << i << " : " << rmsg[i] << " vs " << static_cast<T>(1) << "\n";
+
+
+    for(int i=0; i<NX; i++) assert(rmsg[i] == static_cast<T>(1) );
+    //std::cout << "rank " << world.rank() << " got message " << msg[0] << std::endl;
   }
 
   return true;

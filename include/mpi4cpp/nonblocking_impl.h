@@ -167,10 +167,18 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
       if (flag) {
         // Resize our buffer and get ready to receive its data
         data->values.resize(data->count);
+
+        //std::cout << "sending " << data->values.size() << " " << data->values[0] << "\n";
+        //int dsize = data->values.size();
         MPI_CHECK_RESULT(MPI_Irecv,
-                               (&(data->values[0]), data->values.size(),MPI_PACKED,
-                                stat.source(), stat.tag(), 
-                                MPI_Comm(data->comm), self->m_requests + 1));
+                               (data->values.data(), //&(data->values[0]), 
+                                data->count, //dsize, //data->values.size(), 
+                                get_mpi_datatype<T>(), //MPI_PACKED,
+                                stat.source(), 
+                                stat.tag(), 
+                                MPI_Comm(data->comm), 
+                                self->m_requests + 1));
+
       } else
         return optional<status>(); // We have not finished yet
     } 
