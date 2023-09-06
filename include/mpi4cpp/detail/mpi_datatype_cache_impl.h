@@ -2,6 +2,7 @@
 
 #include <mpi4cpp/detail/mpi_datatype_cache.h>
 #include <map>
+#include <cassert>
 
 namespace mpi4cpp { namespace mpi { namespace detail {
 
