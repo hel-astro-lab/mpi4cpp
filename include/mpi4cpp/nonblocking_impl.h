@@ -2,10 +2,9 @@
 
 #include "request.h"
 
-namespace mpi4cpp { namespace mpi {
+#include <optional>
 
-using nonstd::optional;
-using nonstd::nullopt;
+namespace mpi4cpp { namespace mpi {
 
 //--------------------------------------------------
 
@@ -136,7 +135,7 @@ namespace detail {
 }
 
 template<typename T, class A>
-inline optional<status> 
+inline std::optional<status> 
 request::handle_dynamic_primitive_array_irecv(request* self, request_action action)
 {
   typedef detail::dynamic_array_irecv_data<T,A> data_t;
@@ -180,7 +179,7 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
                                 self->m_requests + 1));
 
       } else
-        return optional<status>(); // We have not finished yet
+        return std::optional<status>(); // We have not finished yet
     } 
 
     // Check if we have received the message data
@@ -188,9 +187,9 @@ request::handle_dynamic_primitive_array_irecv(request* self, request_action acti
     if (flag) {
       return stat;
     } else 
-      return optional<status>();
+      return std::optional<status>();
   } else {
-    return optional<status>();
+    return std::optional<status>();
   }
 }
 

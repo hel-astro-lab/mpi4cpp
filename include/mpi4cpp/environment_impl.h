@@ -6,13 +6,10 @@
 #include <cassert>
 #include <string>
 #include <ostream>
+#include <optional>
 
 
 namespace mpi4cpp { namespace mpi {
-
-using nonstd::optional;
-using nonstd::nullopt;
-
 
 inline environment::environment(bool abort_on_exception)
   : 
@@ -117,7 +114,7 @@ environment::collectives_tag()
 }
 
 
-inline optional<int> 
+inline std::optional<int> 
 environment::host_rank()
 {
   int* host;
@@ -126,12 +123,12 @@ environment::host_rank()
   MPI_CHECK_RESULT(MPI_Comm_get_attr,
                          (MPI_COMM_WORLD, MPI_HOST, &host, &found));
   if ((found == 0) || *host == MPI_PROC_NULL)
-    return optional<int>();
+    return std::optional<int>();
   else
     return *host;
 }
 
-inline optional<int> 
+inline std::optional<int> 
 environment::io_rank()
 {
   int* io;
@@ -140,7 +137,7 @@ environment::io_rank()
   MPI_CHECK_RESULT(MPI_Comm_get_attr,
                          (MPI_COMM_WORLD, MPI_IO, &io, &found));
   if ((found == 0) || *io == MPI_PROC_NULL)
-    return optional<int>();
+    return std::optional<int>();
   else
     return *io;
 }

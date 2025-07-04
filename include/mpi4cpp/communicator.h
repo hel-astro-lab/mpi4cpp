@@ -1,7 +1,6 @@
 #pragma once
 
 //#include <optional>
-//#include "nonstd/optional.hpp"
 
 #include <vector>
 #include <iterator>

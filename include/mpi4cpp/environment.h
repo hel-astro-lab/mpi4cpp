@@ -1,17 +1,12 @@
 #pragma once
 
 #include <string>
-//#include <optional>
-#include <nonstd/optional.hpp>
+#include <optional>
 
 #include "mpi4cpp/detail/mpi_datatype_cache.h"
 
 
 namespace mpi4cpp { namespace mpi {
-
-using nonstd::optional;
-using nonstd::nullopt;
-
 
   namespace threading {
 /** @brief specify the supported threading level.
@@ -149,14 +144,14 @@ class environment {
    *
    *  If there is a host process, this routine returns the rank of
    *  that process. Otherwise, it returns an empty @c
-   *  optional<int>. MPI does not define the meaning of a "host"
+   *  std::optional<int>. MPI does not define the meaning of a "host"
    *  process: consult the documentation for the MPI
    *  implementation. This routine examines the @c MPI_HOST attribute
    *  of @c MPI_COMM_WORLD.
    *
    *  @returns The rank of the host process, if one exists.
    */
-  static optional<int> host_rank();
+  static std::optional<int> host_rank();
 
   /** Retrieves the rank of a process that can perform input/output.
    *
@@ -172,7 +167,7 @@ class environment {
    *  any_source if every process can perform I/O, or no value if no
    *  process can perform I/O.
    */
-  static optional<int> io_rank();
+  static std::optional<int> io_rank();
 
   /** Retrieve the name of this processor.
    *

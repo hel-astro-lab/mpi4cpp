@@ -11,8 +11,7 @@
 #include <utility>   // for std::pair
 #include <algorithm> // for iter_swap, reverse
 #include <cassert>
-//#include <optional>
-#include "nonstd/optional.hpp"
+#include <optional>
 
 #include "request.h"
 #include "status.h"
@@ -20,10 +19,6 @@
 
 
 namespace mpi4cpp { namespace mpi {
-
-  using nonstd::optional;
-  using nonstd::nullopt;
-
 
 /** 
  *  @brief Wait until any non-blocking request has completed.
@@ -59,7 +54,7 @@ wait_any(ForwardIterator first, ForwardIterator last)
   while (true) {
     // Check if we have found a completed request. If so, return it.
     if (current->active()) {
-      optional<status> result = current->test();
+      std::optional<status> result = current->test();
       if (bool(result)) {
         return std::make_pair(*result, current);
       }
@@ -135,22 +130,22 @@ wait_any(ForwardIterator first, ForwardIterator last)
  *  @returns If any outstanding requests have completed, a pair
  *  containing the status object that corresponds to the completed
  *  operation and the iterator referencing the completed
- *  request. Otherwise, an empty @c optional<>.
+ *  request. Otherwise, an empty @c std::optional<>.
  */
 template<typename ForwardIterator>
-optional<std::pair<status, ForwardIterator> >
+std::optional<std::pair<status, ForwardIterator> >
 test_any(ForwardIterator first, ForwardIterator last)
 {
   while (first != last) {
     // Check if we have found a completed request. If so, return it.
-    if (optional<status> result = first->test()) {
+    if (std::optional<status> result = first->test()) {
       return std::make_pair(*result, first);
     }
     ++first;
   }
 
   // We found nothing
-  return optional<std::pair<status, ForwardIterator> >();
+  return std::optional<std::pair<status, ForwardIterator> >();
 }
 
 /** 
@@ -193,7 +188,7 @@ wait_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
     difference_type idx = 0;
     for (ForwardIterator current = first; current != last; ++current, ++idx) {
       if (!completed[idx]) {
-        if (optional<status> stat = current->test()) {
+        if (std::optional<status> stat = current->test()) {
           // This outstanding request has been completed. We're done.
           results[idx] = *stat;
           completed[idx] = true;
@@ -261,7 +256,7 @@ wait_all(ForwardIterator first, ForwardIterator last)
     difference_type idx = 0;
     for (ForwardIterator current = first; current != last; ++current, ++idx) {
       if (!completed[idx]) {
-        if (optional<status> stat = current->test()) {
+        if (std::optional<status> stat = current->test()) {
           // This outstanding request has been completed.
           completed[idx] = true;
           --num_outstanding_requests;
@@ -323,12 +318,12 @@ wait_all(ForwardIterator first, ForwardIterator last)
  *
  *  @returns If an @p out parameter was provided, the value @c out
  *  after all of the @c status objects have been emitted (if all
- *  requests were completed) or an empty @c optional<>. If no @p out
+ *  requests were completed) or an empty @c std::optional<>. If no @p out
  *  parameter was provided, returns @c true if all requests have
  *  completed or @c false otherwise.
  */
 template<typename ForwardIterator, typename OutputIterator>
-optional<OutputIterator>
+std::optional<OutputIterator>
 test_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
 {
   std::vector<MPI_Request> requests;
@@ -336,7 +331,7 @@ test_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
     // If we have a non-trivial request, then no requests can be
     // completed.
     if (!first->trivial()) {
-      return optional<OutputIterator>();
+      return std::optional<OutputIterator>();
     }
     requests.push_back(*first->trivial());
   }
@@ -353,7 +348,7 @@ test_all(ForwardIterator first, ForwardIterator last, OutputIterator out)
     }
     return out;
   } else {
-    return optional<OutputIterator>();
+    return std::optional<OutputIterator>();
   }
 }
 
@@ -425,7 +420,7 @@ wait_some(BidirectionalIterator first, BidirectionalIterator last,
   BidirectionalIterator start_of_completed = last;
   while (true) {
     // Check if we have found a completed request. 
-    if (optional<status> result = current->test()) {
+    if (std::optional<status> result = current->test()) {
       using std::iter_swap;
 
       // Emit the resulting status object
@@ -544,7 +539,7 @@ wait_some(BidirectionalIterator first, BidirectionalIterator last)
   BidirectionalIterator start_of_completed = last;
   while (true) {
     // Check if we have found a completed request. 
-    if (optional<status> result = current->test()) {
+    if (std::optional<status> result = current->test()) {
       using std::iter_swap;
 
       // We're expanding the set of completed requests
@@ -660,7 +655,7 @@ test_some(BidirectionalIterator first, BidirectionalIterator last,
   BidirectionalIterator start_of_completed = last;
   while (current != start_of_completed) {
     // Check if we have found a completed request. 
-    if (optional<status> result = current->test()) {
+    if (std::optional<status> result = current->test()) {
       using std::iter_swap;
 
       // Emit the resulting status object
@@ -697,7 +692,7 @@ test_some(BidirectionalIterator first, BidirectionalIterator last)
   BidirectionalIterator start_of_completed = last;
   while (current != start_of_completed) {
     // Check if we have found a completed request. 
-    if (optional<status> result = current->test()) {
+    if (std::optional<status> result = current->test()) {
       using std::iter_swap;
 
       // We're expanding the set of completed requests

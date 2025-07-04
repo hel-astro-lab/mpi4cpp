@@ -43,12 +43,12 @@ class status
    * message. The type @c T must have an associated data type, i.e.,
    * @c is_mpi_datatype<T> must derive @c mpl::true_. In cases where
    * the type @c T does not match the transmitted type, this routine
-   * will return an empty @c optional<int>.
+   * will return an empty @c std::optional<int>.
    *
    * @returns the number of @c T elements in the message, if it can be
    * determined.
    */
-  //template<typename T> optional<int> count() const;
+  //template<typename T> std::optional<int> count() const;
 
 
   /**

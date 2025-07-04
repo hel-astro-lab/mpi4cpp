@@ -1,19 +1,14 @@
-project (tests)
-
 function(add_mpi_test name no_mpi_proc)
-    #include_directories(${MY_TESTING_INCLUDES})
     add_executable(${name} test_${name}.c++)
 
-    target_link_libraries(${name} PRIVATE MPI::MPI_CXX)
+    target_link_libraries(${name} PRIVATE mpi4cpp mpi4cpp_warnings)
 
-    target_compile_options(${name} PRIVATE ${WARNING_FLAGS})
     set(test_parameters ${MPIEXEC_NUMPROC_FLAG} ${no_mpi_proc} "./${name}")
-
     add_test(NAME ${name} COMMAND ${MPIEXEC} ${test_parameters})
 endfunction(add_mpi_test)
 
 
-set (TEST_FILES 
+set (TEST_FILES
      init
      send_recv_nodata
      send_recv
@@ -24,7 +19,7 @@ set (TEST_FILES
      isend_irecv_types
      iarrays
      own_datatype
-     )
+)
 
 
 # add all tests
