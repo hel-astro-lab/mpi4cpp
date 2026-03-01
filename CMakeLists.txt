@@ -15,39 +15,36 @@ project (
     LANGUAGES CXX
 )
 
-add_library (mpi4cpp)
+add_library (mpi4cpp INTERFACE)
 
-set_target_properties(mpi4cpp PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(mpi4cpp PROPERTIES LINKER_LANGUAGE CXX)
-
-target_include_directories (mpi4cpp PUBLIC "${PROJECT_SOURCE_DIR}/include")
+target_include_directories (mpi4cpp INTERFACE "${PROJECT_SOURCE_DIR}/include")
 target_sources (
     mpi4cpp
-    PUBLIC FILE_SET
-           all_headers
-           TYPE
-           HEADERS
-           BASE_DIRS
-           ${PROJECT_SOURCE_DIR}/include/
-           FILES
-           ./include/mpi4cpp/communicator.h
-           ./include/mpi4cpp/communicator_impl.h
-           ./include/mpi4cpp/datatype_fwd.h
-           ./include/mpi4cpp/datatype.h
-           ./include/mpi4cpp/environment.h
-           ./include/mpi4cpp/environment_impl.h
-           ./include/mpi4cpp/exception.h
-           ./include/mpi4cpp/mpi.h
-           ./include/mpi4cpp/nonblocking.h
-           ./include/mpi4cpp/nonblocking_impl.h
-           ./include/mpi4cpp/point2point_impl.h
-           ./include/mpi4cpp/request.h
-           ./include/mpi4cpp/request_impl.h
-           ./include/mpi4cpp/status.h
-           ./include/mpi4cpp/status_impl.h
-           ./include/mpi4cpp/detail/mpi_datatype_cache.h
-           ./include/mpi4cpp/detail/mpi_datatype_cache_impl.h
-           ./include/mpi4cpp/detail/mpl.h
+    INTERFACE FILE_SET
+              all_headers
+              TYPE
+              HEADERS
+              BASE_DIRS
+              ${PROJECT_SOURCE_DIR}/include/
+              FILES
+              ./include/mpi4cpp/communicator.h
+              ./include/mpi4cpp/communicator_impl.h
+              ./include/mpi4cpp/datatype_fwd.h
+              ./include/mpi4cpp/datatype.h
+              ./include/mpi4cpp/environment.h
+              ./include/mpi4cpp/environment_impl.h
+              ./include/mpi4cpp/exception.h
+              ./include/mpi4cpp/mpi.h
+              ./include/mpi4cpp/nonblocking.h
+              ./include/mpi4cpp/nonblocking_impl.h
+              ./include/mpi4cpp/point2point_impl.h
+              ./include/mpi4cpp/request.h
+              ./include/mpi4cpp/request_impl.h
+              ./include/mpi4cpp/status.h
+              ./include/mpi4cpp/status_impl.h
+              ./include/mpi4cpp/detail/mpi_datatype_cache.h
+              ./include/mpi4cpp/detail/mpi_datatype_cache_impl.h
+              ./include/mpi4cpp/detail/mpl.h
 )
 
 # Use phony target for handling targets.
@@ -60,7 +57,7 @@ target_compile_options (mpi4cpp_warnings
 
 find_package (MPI)
 
-target_link_libraries (mpi4cpp PUBLIC MPI::MPI_CXX PRIVATE mpi4cpp_warnings)
+target_link_libraries (mpi4cpp INTERFACE MPI::MPI_CXX mpi4cpp_warnings)
 
 if (PROJECT_IS_TOP_LEVEL)
     # Declares BUILD_TESTING option (default: ON).
