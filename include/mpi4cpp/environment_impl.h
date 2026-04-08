@@ -16,11 +16,11 @@ inline environment::environment(bool abort_on_exception)
     abort_on_exception(abort_on_exception)
 {
   if(!initialized()) {
-    int flag=-2;
+    int flag = 0;
     MPI_Initialized(&flag);
-    //std::cout << "mpi_init " << flag << "\n";
-
-    MPI_CHECK_RESULT(MPI_Init, (nullptr, nullptr));
+    if (!flag) {
+      MPI_CHECK_RESULT(MPI_Init, (nullptr, nullptr));
+    }
     i_initialized = true;
   }
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
@@ -32,8 +32,11 @@ inline environment::environment(int& argc, char** &argv, bool abort_on_exception
     abort_on_exception(abort_on_exception)
 {
   if (!initialized()) {
-    //std::cout << "mpi_init2\n";
-    MPI_CHECK_RESULT(MPI_Init, (&argc, &argv));
+    int flag = 0;
+    MPI_Initialized(&flag);
+    if (!flag) {
+      MPI_CHECK_RESULT(MPI_Init, (&argc, &argv));
+    }
     i_initialized = true;
   }
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
@@ -48,9 +51,12 @@ inline environment::environment(int& argc, char** &argv, threading::level mt_lev
   // It is not clear that we can pass null in MPI_Init_thread.
   int dummy_thread_level = 0;
   if (!initialized()) {
-    //std::cout << "mpi_init3\n";
-    MPI_CHECK_RESULT(MPI_Init_thread, 
-                           (&argc, &argv, int(mt_level), &dummy_thread_level));
+    int flag = 0;
+    MPI_Initialized(&flag);
+    if (!flag) {
+      MPI_CHECK_RESULT(MPI_Init_thread,
+                             (&argc, &argv, int(mt_level), &dummy_thread_level));
+    }
     i_initialized = true;
   }
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
