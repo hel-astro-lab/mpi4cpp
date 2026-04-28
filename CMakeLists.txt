@@ -17,15 +17,14 @@ project (
 
 add_library (mpi4cpp INTERFACE)
 
-target_include_directories (mpi4cpp INTERFACE "${PROJECT_SOURCE_DIR}/include")
 target_sources (
     mpi4cpp
     INTERFACE FILE_SET
-              all_headers
+              all_mpi4cpp_headers
               TYPE
               HEADERS
               BASE_DIRS
-              ${PROJECT_SOURCE_DIR}/include/
+              ./include/
               FILES
               ./include/mpi4cpp/communicator.h
               ./include/mpi4cpp/communicator_impl.h
