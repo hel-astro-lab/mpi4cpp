@@ -1,3 +1,6 @@
+# Copyright 2018 - 2026, Joonas Nättilä and the hel-astro-lab contributors
+# SPDX-License-Identifier: Apache-2.0
+
 function(add_mpi_test name no_mpi_proc)
     add_executable(${name} test_${name}.c++)
 
