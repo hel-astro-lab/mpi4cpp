@@ -1,3 +1,6 @@
+# Copyright 2018 - 2026, Joonas Nättilä and the hel-astro-lab contributors
+# SPDX-License-Identifier: Apache-2.0
+
 cmake_minimum_required (VERSION 3.23)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
@@ -17,15 +20,14 @@ project (
 
 add_library (mpi4cpp INTERFACE)
 
-target_include_directories (mpi4cpp INTERFACE "${PROJECT_SOURCE_DIR}/include")
 target_sources (
     mpi4cpp
     INTERFACE FILE_SET
-              all_headers
+              all_mpi4cpp_headers
               TYPE
               HEADERS
               BASE_DIRS
-              ${PROJECT_SOURCE_DIR}/include/
+              ./include/
               FILES
               ./include/mpi4cpp/communicator.h
               ./include/mpi4cpp/communicator_impl.h
